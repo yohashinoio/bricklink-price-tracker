@@ -24,7 +24,14 @@ export default function ({ watched_items, auth }: Props) {
     return (
         <Layout>
             {/* Drawer of the form to add a new item */}
-            <Drawer position="right" opened={opened} onClose={close}>
+            <Drawer
+                offset={8}
+                radius="md"
+                position={"right"}
+                opened={opened}
+                onClose={close}
+                zIndex={999} // Ensure the drawer is on top of add button
+            >
                 <AddWatchedItemForm />
             </Drawer>
 

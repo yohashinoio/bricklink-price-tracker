@@ -7,7 +7,7 @@ type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <Container size={"xs"} my={32}>
+        <Container size={"xl"} my={32}>
             {children}
         </Container>
     );

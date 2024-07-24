@@ -1,5 +1,4 @@
 import { Layout } from "@/Layouts/Layout";
-import { PageProps } from "@/types";
 import {
     Button,
     Checkbox,
@@ -17,7 +16,7 @@ type ValidationError = {
     [key: string]: string[];
 };
 
-export default function ({ auth }: PageProps) {
+export const AddWatchedItemForm = () => {
     const [validationErrors, setValidationErrors] =
         React.useState<ValidationError>({});
 
@@ -36,7 +35,7 @@ export default function ({ auth }: PageProps) {
         values.type = values.type.toUpperCase();
 
         axios
-            .post(route("items.store"), values)
+            .post(route("watched_items.store"), values)
             .then(() => (window.location.href = route("items.index")))
             .catch((error) => {
                 console.log(error);
@@ -62,6 +61,7 @@ export default function ({ auth }: PageProps) {
             <form onSubmit={onSubmit}>
                 <Stack>
                     <Select
+                        data-autofocus
                         required
                         label="Item Type"
                         {...form.getInputProps("type")}
@@ -104,10 +104,10 @@ export default function ({ auth }: PageProps) {
                     />
 
                     <Group justify="flex-end">
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit">Add</Button>
                     </Group>
                 </Stack>
             </form>
         </Layout>
     );
-}
+};

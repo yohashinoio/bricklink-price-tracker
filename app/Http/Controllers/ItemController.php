@@ -14,7 +14,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        $items = auth()->user()->items;
+
+        return Inertia::render("Item/Index", ["watched_items" => $items]);
     }
 
     /**
@@ -22,21 +24,15 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return Inertia::render("Item/Create");
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ItemRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
-
-        $item = Item::firstOrCreate($validated);
-
-        $request->user()->watchedItems()->create([
-            "item_id" => $item->id,
-        ]);
+        //
     }
 
     /**

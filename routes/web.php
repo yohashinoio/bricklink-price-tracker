@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WatchedItemController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,4 +28,5 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource("items", ItemController::class)->middleware(["auth", "verified"])->only("index", "create", "store");
+Route::resource("items", ItemController::class)->middleware(["auth", "verified"])->only("index", "store");
+Route::resource("watched_items", WatchedItemController::class)->middleware(["auth", "verified"])->only("store");

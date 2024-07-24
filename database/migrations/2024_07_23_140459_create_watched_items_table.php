@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Join table.
         Schema::create('watched_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained("users");

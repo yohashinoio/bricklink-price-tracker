@@ -91,7 +91,6 @@ export const AddWatchedItemForm = () => {
                     />
 
                     <NumberInput
-                        required
                         label="Color No"
                         placeholder=""
                         key={form.key("color_id")}

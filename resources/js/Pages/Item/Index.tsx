@@ -1,16 +1,8 @@
-import { AddWatchedItemForm } from "@/Components/Item/WatchedItemCreateForm";
+import { AddWatchedItemForm } from "@/Components/Item/AddWatchedItemForm";
 import { Layout } from "@/Layouts/Layout";
 import { PageProps } from "@/types";
 import { Item } from "@/types/item";
-import {
-    ActionIcon,
-    Affix,
-    Button,
-    Drawer,
-    Paper,
-    Stack,
-    Text,
-} from "@mantine/core";
+import { ActionIcon, Affix, Drawer, Paper, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 
@@ -49,7 +41,7 @@ export default function ({ watched_items, auth }: Props) {
                         <Text>Type: {item.type}</Text>
                         <Text>No: {item.no}</Text>
                         <Text>Color Id: {item.color_id}</Text>
-                        <Text>Include used: {item.include_used}</Text>
+                        <Text>New or used: {item.new_or_used}</Text>
                     </Paper>
                 ))}
             </Stack>

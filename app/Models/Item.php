@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Item extends Model
 {
@@ -15,6 +13,6 @@ class Item extends Model
         'type',
         'no',
         'color_id',
-        'include_used',
+        'new_or_used',
     ];
 }

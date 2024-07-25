@@ -1,9 +1,9 @@
 import { Layout } from "@/Layouts/Layout";
 import {
     Button,
-    Checkbox,
     Group,
     NumberInput,
+    Radio,
     Select,
     Stack,
     TextInput,
@@ -23,10 +23,10 @@ export const AddWatchedItemForm = () => {
     const form = useForm({
         mode: "uncontrolled",
         initialValues: {
-            type: "Minifig",
+            type: "",
             no: "",
             color_id: null,
-            include_used: false,
+            new_or_used: "N",
         },
     });
 
@@ -61,7 +61,6 @@ export const AddWatchedItemForm = () => {
             <form onSubmit={onSubmit}>
                 <Stack>
                     <Select
-                        data-autofocus
                         required
                         label="Item Type"
                         {...form.getInputProps("type")}
@@ -77,6 +76,10 @@ export const AddWatchedItemForm = () => {
                             "Unsorted_lot",
                             "Original_box",
                         ]}
+                        searchable
+                        allowDeselect
+                        nothingFoundMessage="Nothing found..."
+                        comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
                     />
 
                     <TextInput
@@ -95,13 +98,17 @@ export const AddWatchedItemForm = () => {
                         {...form.getInputProps("color_id")}
                     />
 
-                    <Checkbox
-                        label="Includes used items"
-                        key={form.key("include_used")}
-                        {...form.getInputProps("include_used", {
-                            type: "checkbox",
-                        })}
-                    />
+                    <Radio.Group
+                        required
+                        label="Select a condition"
+                        key={form.key("new_or_used")}
+                        {...form.getInputProps("new_or_used")}
+                    >
+                        <Group mt="xs">
+                            <Radio value="N" label="New" />
+                            <Radio value="U" label="Used" />
+                        </Group>
+                    </Radio.Group>
 
                     <Group justify="flex-end">
                         <Button type="submit">Add</Button>

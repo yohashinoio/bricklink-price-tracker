@@ -3,5 +3,5 @@ export type Item = {
     type: string;
     no: string;
     color_id: number;
-    include_used: boolean;
+    new_or_used: "N" | "U";
 };

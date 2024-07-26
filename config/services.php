@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'bricklink' => [
+        'base_uri' => env('BRICKLINK_BASE_URI'),
+        'consumer_key' => env('BRICKLINK_CONSUMER_KEY'),
+        'consumer_secret' => env('BRICKLINK_CONSUMER_SECRET'),
+        'token' => env('BRICKLINK_TOKEN'),
+        'token_secret' => env('BRICKLINK_TOKEN_SECRET'),
+    ],
 ];

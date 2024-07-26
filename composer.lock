@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "989fb98a2f2ba7d4c2161ce2ce20164a",
+    "content-hash": "e4d43ed649091668034e9c6ee795408e",
     "packages": [
         {
             "name": "brick/math",
@@ -578,6 +578,78 @@
             "time": "2023-10-12T05:21:21+00:00"
         },
         {
+            "name": "gmponos/guzzle_logger",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gmponos/guzzle-log-middleware.git",
+                "reference": "8784459b18f332beb49363a4d71399e784d8c298"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gmponos/guzzle-log-middleware/zipball/8784459b18f332beb49363a4d71399e784d8c298",
+                "reference": "8784459b18f332beb49363a4d71399e784d8c298",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.1 || ^7.0.1",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": "^7.2 || ^8.0",
+                "psr/log": "^1.1 || ^2.0 || ^3.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "~0.12.32",
+                "phpstan/phpstan-phpunit": "^0.12.11",
+                "phpstan/phpstan-strict-rules": "^0.12.2",
+                "phpunit/phpunit": "^8.5.8 || ^9.2.5",
+                "squizlabs/php_codesniffer": "^3.5.5"
+            },
+            "suggest": {
+                "monolog/monolog": "A PSR-3 logger to send your logs to files, sockets and various web services"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleLogMiddleware\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "George Mponos",
+                    "email": "gmponos@gmail.com"
+                }
+            ],
+            "description": "A Guzzle middleware to log request and responses automatically",
+            "homepage": "https://github.com/gmponos/guzzle-log-middleware",
+            "keywords": [
+                "Guzzle",
+                "PSR3",
+                "log",
+                "logging"
+            ],
+            "support": {
+                "issues": "https://github.com/gmponos/guzzle-log-middleware/issues",
+                "source": "https://github.com/gmponos/guzzle-log-middleware/tree/v2.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/gmponos",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-04-04T08:50:42+00:00"
+        },
+        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.2",
             "source": {
@@ -641,16 +713,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.9.0",
+            "version": "7.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "84ac2b2afc44e40d3e8e658a45d68d6d20437612"
+                "reference": "d281ed313b989f213357e3be1a179f02196ac99b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/84ac2b2afc44e40d3e8e658a45d68d6d20437612",
-                "reference": "84ac2b2afc44e40d3e8e658a45d68d6d20437612",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/d281ed313b989f213357e3be1a179f02196ac99b",
+                "reference": "d281ed313b989f213357e3be1a179f02196ac99b",
                 "shasum": ""
             },
             "require": {
@@ -747,7 +819,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.9.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.9.2"
             },
             "funding": [
                 {
@@ -763,7 +835,66 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-18T11:52:56+00:00"
+            "time": "2024-07-24T11:22:20+00:00"
+        },
+        {
+            "name": "guzzlehttp/oauth-subscriber",
+            "version": "0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/oauth-subscriber.git",
+                "reference": "8d6cab29f8397e5712d00a383eeead36108a3c1f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/oauth-subscriber/zipball/8d6cab29f8397e5712d00a383eeead36108a3c1f",
+                "reference": "8d6cab29f8397e5712d00a383eeead36108a3c1f",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5|^7.2",
+                "guzzlehttp/psr7": "^1.7|^2.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0|^9.3.3"
+            },
+            "suggest": {
+                "ext-openssl": "Required to sign using RSA-SHA1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Subscriber\\Oauth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle OAuth 1.0 subscriber",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "oauth"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/oauth-subscriber/issues",
+                "source": "https://github.com/guzzle/oauth-subscriber/tree/0.6.0"
+            },
+            "time": "2021-07-13T12:01:32+00:00"
         },
         {
             "name": "guzzlehttp/promises",

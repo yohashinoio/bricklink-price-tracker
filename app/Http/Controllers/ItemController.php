@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemRequest;
 use App\Models\Item;
+use App\Services\BricklinkApiService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ItemController extends Controller
 {
+    protected $bricklinkApiService;
+
+    public function __construct(BricklinkApiService $bricklinkApiService)
+    {
+        $this->bricklinkApiService = $bricklinkApiService;
+    }
+
     /**
      * Display a listing of the resource.
      */

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Color;
 use App\Models\Item;
+use App\Models\PriceGuide;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,9 +15,16 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = auth()->user()->items()->with("itemInfo")->get();
+        $items = auth()->user()->items()->with(["itemInfo", "priceGuide.priceDetails"])->get();
 
-        return Inertia::render("Item/Index", ["watched_items" => $items]);
+        $colors = [];
+
+        foreach ($items as $item) {
+            if ($item->color_id)
+                array_push($colors, Color::where('color_id', $item->color_id)->first());
+        }
+
+        return Inertia::render("Item/Index", ["watched_items" => $items, "colors" => $colors]);
     }
 
     /**

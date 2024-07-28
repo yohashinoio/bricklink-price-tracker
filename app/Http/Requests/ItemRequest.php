@@ -26,7 +26,6 @@ class ItemRequest extends FormRequest
             'type' => ['required', 'string', Rule::in("MINIFIG", "PART", "SET", "BOOK", "GEAR", "CATALOG", "INSTRUCTION", "UNSORTED_LOT", "ORIGINAL_BOX")],
             'no' => ['required', 'string'],
             'color_id' => ['integer', 'nullable'],
-            'new_or_used' => ['required', 'string', Rule::in("N", "U")],
         ];
     }
 
@@ -44,9 +43,6 @@ class ItemRequest extends FormRequest
             'no.required' => 'Number of item is required',
             'no.string' => 'Number of item must be a string',
             'color_id.integer' => 'Color ID must be an integer',
-            'new_or_used.required' => 'New or used is required',
-            'new_or_used.string' => 'New or used must be a string',
-            'new_or_used.in' => 'New or used must be one of: N, U',
         ];
     }
 }

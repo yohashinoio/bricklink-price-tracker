@@ -12,6 +12,7 @@ class PriceDetail extends Model
 
     protected $fillable = [
         'price_guide_id',
+        'new_or_used',
         'quantity',
         'unit_price',
         'shipping_available',

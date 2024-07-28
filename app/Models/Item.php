@@ -6,6 +6,7 @@ use App\Services\BricklinkApiService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 
 class Item extends Model
@@ -15,12 +16,16 @@ class Item extends Model
     protected $fillable = [
         'item_info_id',
         'color_id',
-        'new_or_used',
     ];
 
     public function itemInfo(): BelongsTo
     {
         return $this->belongsTo(ItemInfo::class);
+    }
+
+    public function priceGuide(): HasOne
+    {
+        return $this->hasOne(PriceGuide::class);
     }
 
     /**
@@ -33,25 +38,9 @@ class Item extends Model
         $item = self::firstOrCreate([
             'item_info_id' => $item_info->id,
             'color_id' => $values['color_id'],
-            'new_or_used' => $values['new_or_used'],
         ]);
 
-        $price_guide_data = $bl_api_service->getPriceGuide($item->itemInfo->type, $item->itemInfo->no);
-
-        $price_guide = PriceGuide::create([
-            'item_id' => $item->id,
-            'currency_code' => $price_guide_data->data->currency_code,
-            'total_quantity' => $price_guide_data->data->total_quantity,
-        ]);
-
-        foreach ($price_guide_data->data->price_detail as $pd) {
-            PriceDetail::create([
-                'price_guide_id' => $price_guide->id,
-                'quantity' => $pd->quantity,
-                'unit_price' => $pd->unit_price,
-                'shipping_available' => $pd->shipping_available,
-            ]);
-        }
+        PriceGuide::createUsingApi($item);
 
         return $item;
     }

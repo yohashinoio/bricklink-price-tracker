@@ -32,9 +32,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId("item_info_id")->constrained();
             $table->integer("color_id")->nullable()->comment("The color of the item");
-            // N = New, U = Used
-            // I tried using enum, but it was buggy with automatic insertion, etc., so I stopped.
-            $table->string("new_or_used")->comment("Whether the item is new or used");
             $table->timestamps();
         });
     }
@@ -44,7 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_infos');
         Schema::dropIfExists('items');
+        Schema::dropIfExists('item_infos');
     }
 };

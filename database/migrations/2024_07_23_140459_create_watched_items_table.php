@@ -14,8 +14,8 @@ return new class extends Migration
         // Join table
         Schema::create('watched_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("item_id")->constrained("items");
+            $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
+            $table->foreignId("item_id")->constrained("items")->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('price_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('price_guide_id')->constrained()->cascadeOnDelete();
+            $table->string('new_or_used');
             $table->integer('quantity');
             $table->decimal('unit_price');
             $table->boolean('shipping_available');

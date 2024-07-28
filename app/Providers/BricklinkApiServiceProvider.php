@@ -15,7 +15,7 @@ class BricklinkApiServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(BricklinkApiService::class, function ($app) {
+        $this->app->singleton(BricklinkApiService::class, function () {
             $stack = HandlerStack::create();
 
             $middleware = new Oauth1([

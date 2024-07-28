@@ -2,7 +2,20 @@ import { AddWatchedItemForm } from "@/Components/Item/AddWatchedItemForm";
 import { Layout } from "@/Layouts/Layout";
 import { PageProps } from "@/types";
 import { Item } from "@/types/item";
-import { ActionIcon, Affix, Drawer, Paper, Stack, Text } from "@mantine/core";
+import {
+    ActionIcon,
+    Affix,
+    AspectRatio,
+    Box,
+    Drawer,
+    Flex,
+    Image,
+    Paper,
+    rem,
+    Stack,
+    Text,
+    Title,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 
@@ -12,6 +25,8 @@ type Props = {
 
 export default function ({ watched_items, auth }: Props) {
     const [opened, { open, close }] = useDisclosure();
+
+    console.log(watched_items);
 
     return (
         <Layout>
@@ -38,10 +53,26 @@ export default function ({ watched_items, auth }: Props) {
             <Stack>
                 {watched_items.map((item, idx) => (
                     <Paper shadow="xs" key={idx}>
-                        <Text>Type: {item.type}</Text>
-                        <Text>No: {item.no}</Text>
-                        <Text>Color Id: {item.color_id}</Text>
-                        <Text>New or used: {item.new_or_used}</Text>
+                        <Flex mah={200} p={8}>
+                            <Box w={"12%"} h={"auto"} pr={8}>
+                                <Image
+                                    fit="contain"
+                                    w={"100%"}
+                                    h={"100%"}
+                                    src={item.item_info.image_url}
+                                    alt={item.item_info.name}
+                                />
+                            </Box>
+                            <Box>
+                                <Title order={2} lineClamp={1}>
+                                    {item.item_info.name}
+                                </Title>
+                                <Text>Type: {item.item_info.type}</Text>
+                                <Text>No: {item.item_info.no}</Text>
+                                <Text>Color Id: {item.color_id}</Text>
+                                <Text>New or used: {item.new_or_used}</Text>
+                            </Box>
+                        </Flex>
                     </Paper>
                 ))}
             </Stack>

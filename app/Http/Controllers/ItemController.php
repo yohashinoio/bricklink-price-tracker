@@ -2,27 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ItemRequest;
 use App\Models\Item;
-use App\Services\BricklinkApiService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ItemController extends Controller
 {
-    protected $bricklinkApiService;
-
-    public function __construct(BricklinkApiService $bricklinkApiService)
-    {
-        $this->bricklinkApiService = $bricklinkApiService;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $items = auth()->user()->items;
+        $items = auth()->user()->items()->with("itemInfo")->get();
 
         return Inertia::render("Item/Index", ["watched_items" => $items]);
     }

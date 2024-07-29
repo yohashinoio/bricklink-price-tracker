@@ -24,9 +24,17 @@ const PriceLineChart: React.FC<Props> = ({ price_details }) => {
         }
     );
 
-    const domain_lower = (() => {
+    const x_domain_lower = (() => {
         const n = Math.round(
             Math.min(...price_details.map((x) => x.unit_price)) - 50
+        );
+        if (n < 0) return 0;
+        else return n;
+    })();
+
+    const y_domain_lower = (() => {
+        const n = Math.round(
+            Math.min(...price_details.map((x) => x.quantity)) - 5
         );
         if (n < 0) return 0;
         else return n;
@@ -38,7 +46,7 @@ const PriceLineChart: React.FC<Props> = ({ price_details }) => {
 
             <Line
                 type="monotone"
-                dataKey="unit_price"
+                dataKey="quantity"
                 stroke="#82ca9d"
                 dot={(props) => (
                     <ShippingAvailableDot
@@ -49,16 +57,24 @@ const PriceLineChart: React.FC<Props> = ({ price_details }) => {
                 )}
             />
 
-            <YAxis
+            <XAxis
                 dataKey="unit_price"
                 domain={[
-                    domain_lower,
+                    x_domain_lower,
                     Math.round(
                         Math.max(...price_details.map((x) => x.unit_price)) + 50
                     ),
                 ]}
             />
-            <XAxis dataKey="serial" />
+            <YAxis
+                dataKey="quantity"
+                domain={[
+                    y_domain_lower,
+                    Math.round(
+                        Math.max(...price_details.map((x) => x.quantity)) + 5
+                    ),
+                ]}
+            />
         </LineChart>
     );
 };

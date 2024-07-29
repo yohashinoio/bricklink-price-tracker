@@ -253,6 +253,8 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                             }))}
                             comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
                             renderOption={renderColorSelectOption}
+                            searchable
+                            nothingFoundMessage="Nothing found..."
                         />
                     </Stepper.Step>
                 </Stepper>

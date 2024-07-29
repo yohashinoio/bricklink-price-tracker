@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource("items", ItemController::class)->middleware(["auth", "verified"])->only("index", "store");
+Route::resource("items", ItemController::class)->middleware(["auth", "verified"])->only("index", "store", "destroy");
 Route::resource("watched_items", WatchedItemController::class)->middleware(["auth", "verified"])->only("store");
 
 Route::post("prices/{item_id}", [PriceController::class, "update"])->middleware(["auth", "verified"])->name("prices.update");

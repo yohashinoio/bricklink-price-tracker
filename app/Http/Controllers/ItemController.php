@@ -72,6 +72,6 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        auth()->user()->items()->detach($item->id);
     }
 }

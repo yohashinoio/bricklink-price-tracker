@@ -1,19 +1,21 @@
-import { Layout } from "@/Layouts/Layout";
 import { Color } from "@/types/color";
 import {
     Box,
     Button,
     Group,
+    LoadingOverlay,
     Select,
     SelectProps,
     Stack,
     Stepper,
+    Text,
     TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
-import { send } from "process";
 import React from "react";
 
 type ValidationError = {
@@ -56,6 +58,8 @@ const renderColorSelectOption: SelectProps["renderOption"] = ({
 };
 
 export const ItemForm: React.FC<Props> = ({ onComplete }) => {
+    const [visible_loading, { toggle: toggleLoading }] = useDisclosure(false);
+
     const [active, setActive] = React.useState(0);
     const [color_completions, setColorCompletions] = React.useState<Color[]>(
         []
@@ -64,7 +68,24 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
         string | null
     >(null);
 
-    const sendStoreRequest = () => {
+    const openNoColorConfirmModal = () =>
+        modals.openConfirmModal({
+            title: "The item didn't have a color",
+            centered: true,
+            children: (
+                <Text size="sm">
+                    The item you entered did not have a color. Therefore, skip
+                    and complete the color selection. Are you sure?
+                </Text>
+            ),
+            labels: { confirm: "Complete", cancel: "Cancel" },
+            zIndex: 1001,
+            onConfirm: () => complete(),
+        });
+
+    const complete = () => {
+        toggleLoading();
+
         const values = form.getValues();
 
         // Type is always uppercase
@@ -86,7 +107,8 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
             .catch((error) => {
                 console.log(error);
                 setValidationErrors(error.response.data.errors);
-            });
+            })
+            .finally(() => toggleLoading());
     };
 
     const nextStep = () => {
@@ -114,8 +136,8 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                         knowns.data.length === 1 &&
                         knowns.data[0].color_id === 0
                     ) {
-                        sendStoreRequest();
-                        return;
+                        openNoColorConfirmModal();
+                        setActive(() => 0);
                     } else {
                         for (const known of knowns.data) {
                             getColorDetail(known.color_id).then((color) =>
@@ -131,7 +153,7 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                 });
         }
 
-        if (active === 1) sendStoreRequest();
+        if (active === 1) complete();
     };
 
     const prevStep = () => {
@@ -172,67 +194,78 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
 
     return (
         <>
-            <Stepper active={active} onStepClick={setActive}>
-                <Stepper.Step label="First step" description="Select item">
-                    <form>
-                        <Stack>
-                            <Select
-                                required
-                                label="Item Type"
-                                {...form.getInputProps("type")}
-                                key={form.key("type")}
-                                data={[
-                                    "Minifig",
-                                    "Part",
-                                    "Set",
-                                    "Book",
-                                    "Gear",
-                                    "Catalog",
-                                    "Instruction",
-                                    "Unsorted_lot",
-                                    "Original_box",
-                                ]}
-                                searchable
-                                allowDeselect
-                                nothingFoundMessage="Nothing found..."
-                                comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
-                            />
+            <Box pos="relative">
+                <LoadingOverlay
+                    visible={visible_loading}
+                    zIndex={1002}
+                    overlayProps={{ radius: "sm", blur: 2 }}
+                />
 
-                            <TextInput
-                                required
-                                label="Item No"
-                                placeholder="min010"
-                                key={form.key("no")}
-                                {...form.getInputProps("no")}
-                            />
-                        </Stack>
-                    </form>
-                </Stepper.Step>
-                <Stepper.Step label="Second step" description="Select color">
-                    <Select
-                        withAsterisk
-                        label="Select color"
-                        placeholder="Select color"
-                        onChange={(value) => setSelectedColorName(value)}
-                        value={selected_color_code}
-                        data={color_completions.map((color) => ({
-                            value: color.color_code,
-                            label: color.color_name,
-                        }))}
-                        comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
-                        renderOption={renderColorSelectOption}
-                    />
-                </Stepper.Step>
-            </Stepper>
+                <Stepper active={active} onStepClick={setActive}>
+                    <Stepper.Step label="First step" description="Enter item">
+                        <form>
+                            <Stack>
+                                <Select
+                                    required
+                                    label="Item Type"
+                                    {...form.getInputProps("type")}
+                                    key={form.key("type")}
+                                    data={[
+                                        "Minifig",
+                                        "Part",
+                                        "Set",
+                                        "Book",
+                                        "Gear",
+                                        "Catalog",
+                                        "Instruction",
+                                        "Unsorted_lot",
+                                        "Original_box",
+                                    ]}
+                                    searchable
+                                    allowDeselect
+                                    nothingFoundMessage="Nothing found..."
+                                    comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
+                                />
 
-            <Group justify="center" mt="xl">
-                <Button variant="default" onClick={prevStep}>
-                    Back
-                </Button>
-                <Button onClick={nextStep}>
-                    {active === 1 ? "Complete" : "Next step"}
-                </Button>
-            </Group>
+                                <TextInput
+                                    required
+                                    label="Item No"
+                                    placeholder="min010"
+                                    key={form.key("no")}
+                                    {...form.getInputProps("no")}
+                                />
+                            </Stack>
+                        </form>
+                    </Stepper.Step>
+                    <Stepper.Step
+                        label="Second step"
+                        description="Select color"
+                    >
+                        <Select
+                            withAsterisk
+                            label="Select color"
+                            placeholder="Select color"
+                            onChange={(value) => setSelectedColorName(value)}
+                            value={selected_color_code}
+                            data={color_completions.map((color) => ({
+                                value: color.color_code,
+                                label: color.color_name,
+                            }))}
+                            comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
+                            renderOption={renderColorSelectOption}
+                        />
+                    </Stepper.Step>
+                </Stepper>
+
+                <Group justify="center" mt="xl">
+                    <Button variant="default" onClick={prevStep}>
+                        Back
+                    </Button>
+                    <Button onClick={nextStep}>
+                        {active === 1 ? "Complete" : "Next step"}
+                    </Button>
+                </Group>
+            </Box>
         </>
     );
 };

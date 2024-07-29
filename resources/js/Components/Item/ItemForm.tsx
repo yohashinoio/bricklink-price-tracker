@@ -39,13 +39,10 @@ const icon_props = {
     size: 18,
 };
 
-const renderColorSelectOption: SelectProps["renderOption"] = ({
-    option,
-    checked,
-}) => {
+const renderColorSelectOption = ({ option, checked }: any) => {
     return (
         <Group flex="1" gap="xs">
-            <Box w={16} h={16} bg={"#" + option.value} />
+            <Box w={16} h={16} bg={"#" + option.color_code} />
             {option.label}
             {checked && (
                 <IconCheck
@@ -64,7 +61,7 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
     const [color_completions, setColorCompletions] = React.useState<Color[]>(
         []
     );
-    const [selected_color_code, setSelectedColorName] = React.useState<
+    const [selected_color_id, setSelectedColorId] = React.useState<
         string | null
     >(null);
 
@@ -91,15 +88,9 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
         // Type is always uppercase
         values.type = values.type.toUpperCase();
 
-        console.log(color_completions, selected_color_code);
-        values.color_id =
-            color_completions.find(
-                (color) => color.color_code === selected_color_code
-            )?.color_id ||
-            color_completions.at(0)?.color_id ||
-            null;
-
-        console.log(values);
+        values.color_id = selected_color_id
+            ? parseInt(selected_color_id)
+            : color_completions.at(0)?.color_id || null;
 
         axios
             .post(route("watched_items.store"), values)
@@ -139,16 +130,24 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                         openNoColorConfirmModal();
                         setActive(() => 0);
                     } else {
+                        let promises = [];
+
                         for (const known of knowns.data) {
-                            getColorDetail(known.color_id).then((color) =>
-                                setColorCompletions((current) => [
-                                    ...current,
-                                    color,
-                                ])
+                            promises.push(
+                                getColorDetail(known.color_id).then((color) => {
+                                    if (color.color_code && color.color_name) {
+                                        setColorCompletions((current) => [
+                                            ...current,
+                                            color,
+                                        ]);
+                                    }
+                                })
                             );
                         }
 
-                        setActive((current) => current + 1);
+                        Promise.all(promises).then(() =>
+                            setActive((current) => current + 1)
+                        );
                     }
                 });
         }
@@ -159,7 +158,7 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
     const prevStep = () => {
         if (active === 1) {
             setColorCompletions([]); // Clear color completions
-            setSelectedColorName(null);
+            setSelectedColorId(null);
         }
 
         setActive((current) => (current > 0 ? current - 1 : current));
@@ -191,6 +190,12 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
             if (errors) form.setFieldError(key, errors[0]);
         });
     })();
+
+    const data = color_completions.map((color) => ({
+        value: color.color_id.toString(),
+        label: color.color_name,
+        color_code: color.color_code,
+    }));
 
     return (
         <>
@@ -245,12 +250,9 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                             withAsterisk
                             label="Select color"
                             placeholder="Select color"
-                            onChange={(value) => setSelectedColorName(value)}
-                            value={selected_color_code}
-                            data={color_completions.map((color) => ({
-                                value: color.color_code,
-                                label: color.color_name,
-                            }))}
+                            onChange={(value) => setSelectedColorId(value)}
+                            value={selected_color_id}
+                            data={data}
                             comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
                             renderOption={renderColorSelectOption}
                             searchable

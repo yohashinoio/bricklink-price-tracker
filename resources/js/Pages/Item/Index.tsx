@@ -87,9 +87,10 @@ export default function ({ watched_items, colors, auth }: Props) {
                                         src={item.item_info.image_url}
                                         alt={item.item_info.name}
                                         onError={() => {
-                                            if (imgRef.current)
+                                            if (imgRef.current) {
                                                 imgRef.current.src =
                                                     item.item_info.thumbnail_url;
+                                            }
                                         }}
                                     />
                                 </Box>

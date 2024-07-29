@@ -24,6 +24,14 @@ const PriceLineChart: React.FC<Props> = ({ price_details }) => {
         }
     );
 
+    const domain_lower = (() => {
+        const n = Math.round(
+            Math.min(...price_details.map((x) => x.unit_price)) - 50
+        );
+        if (n < 0) return 0;
+        else return n;
+    })();
+
     return (
         <LineChart width={500} height={300} data={price_details_with_serial}>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
@@ -44,9 +52,7 @@ const PriceLineChart: React.FC<Props> = ({ price_details }) => {
             <YAxis
                 dataKey="unit_price"
                 domain={[
-                    Math.round(
-                        Math.min(...price_details.map((x) => x.unit_price)) - 50
-                    ),
+                    domain_lower,
                     Math.round(
                         Math.max(...price_details.map((x) => x.unit_price)) + 50
                     ),

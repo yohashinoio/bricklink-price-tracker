@@ -34,7 +34,7 @@ class WatchedItemController extends Controller
     {
         $validated = $request->validated();
 
-        $item_info = ItemInfo::updateOrCreateWithFetch($validated['type'], $validated['no']);
+        $item_info = ItemInfo::updateOrCreateUsingApi($validated['type'], $validated['no']);
 
         $item = Item::firstOrCreateWithPriceGuide($validated, $item_info);
 

@@ -32,6 +32,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId("item_info_id")->constrained();
             $table->integer("color_id")->nullable()->comment("The color of the item");
+            // If color_id is null, this column is going to be null.
+            $table->string("colored_image_url")->nullable()->comment("The URL of the image of the colored item");
             $table->timestamps();
         });
     }

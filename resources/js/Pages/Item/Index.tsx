@@ -1,4 +1,4 @@
-import { getColorDetail, ItemForm } from "@/Components/Item/ItemForm";
+import { ItemForm } from "@/Components/Item/ItemForm";
 import { Layout } from "@/Layouts/Layout";
 import { PageProps } from "@/types";
 import { Item } from "@/types/item";
@@ -11,7 +11,6 @@ import {
     Group,
     Image,
     Paper,
-    Pill,
     Stack,
     Title,
     Tooltip,
@@ -24,17 +23,31 @@ import parse from "html-react-parser";
 import { PriceDetail } from "../../Components/Item/Price/PriceDetail";
 import { PriceGraph } from "../../Components/Item/Price/PriceGraph";
 import { Color } from "@/types/color";
-import React from "react";
 
 type Props = {
     watched_items: Item[];
     colors: Color[];
 } & PageProps;
 
+const getHighResPartImage = (image_url: string) => {
+    if (!image_url.includes("/P/"))
+        throw new Error("Image URL does not contain /P/");
+
+    const buf = image_url.replace("/P/", "/ItemImage/PN/");
+    return buf.replace(".jpg", ".png");
+};
+
+const prepareImageURL = (item: Item) => {
+    if (!item.color_id) return item.item_info.image_url;
+
+    if (item.item_info.type === "PART")
+        return getHighResPartImage(item.colored_image_url);
+
+    return item.colored_image_url;
+};
+
 export default function ({ watched_items, colors, auth }: Props) {
     const [opened, { open, close }] = useDisclosure();
-
-    const imgRef = React.createRef<HTMLImageElement>();
 
     console.log(watched_items);
 
@@ -73,25 +86,16 @@ export default function ({ watched_items, colors, auth }: Props) {
                     <Paper shadow="xs" key={idx}>
                         <Flex
                             mah={200}
-                            px={16}
-                            py={10}
+                            p={"10 10 10 30"}
                             justify={"space-between"}
                         >
-                            <Flex columnGap={20}>
-                                <Box w={"200px"}>
+                            <Flex columnGap={40}>
+                                <Box w={"100px"} h={"80px"}>
                                     <Image
-                                        ref={imgRef}
                                         fit="contain"
-                                        w={"100%"}
                                         h={"100%"}
-                                        src={item.item_info.image_url}
-                                        alt={item.item_info.name}
-                                        onError={() => {
-                                            if (imgRef.current) {
-                                                imgRef.current.src =
-                                                    item.item_info.thumbnail_url;
-                                            }
-                                        }}
+                                        src={prepareImageURL(item)}
+                                        alt={item.item_info.name + " image"}
                                     />
                                 </Box>
 

@@ -32,7 +32,7 @@ class ItemInfo extends Model
         return $this->hasMany(Item::class);
     }
 
-    public static function updateOrCreateWithFetch(string $item_type, string $item_no): self
+    public static function updateOrCreateUsingApi(string $item_type, string $item_no): self
     {
         $bl_api_service = app(BricklinkApiService::class);
 
@@ -44,8 +44,8 @@ class ItemInfo extends Model
             'name' => $info->data->name,
             'type' => $info->data->type,
             'category_id' => $info->data->category_id,
-            'image_url' => "https:" . $info->data->image_url,
-            'thumbnail_url' => "https:" . $info->data->thumbnail_url,
+            'image_url' => $info->data->image_url,
+            'thumbnail_url' => $info->data->thumbnail_url,
             'weight' => $info->data->weight,
             'dim_x' => $info->data->dim_x,
             'dim_y' => $info->data->dim_y,

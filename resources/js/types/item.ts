@@ -48,5 +48,5 @@ export type Item = {
     item_info: ItemInfo;
     price_guide: PriceGuide;
     color_id: number | null;
-    new_or_used: "N" | "U";
+    colored_image_url: string;
 };

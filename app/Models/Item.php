@@ -16,6 +16,7 @@ class Item extends Model
     protected $fillable = [
         'item_info_id',
         'color_id',
+        'colored_image_url',
     ];
 
     public function itemInfo(): BelongsTo
@@ -35,9 +36,15 @@ class Item extends Model
     {
         $bl_api_service = app(BricklinkApiService::class);
 
+        $colored_image_url = null;
+        if (isset($values['color_id'])) {
+            $colored_image_url = $bl_api_service->getItemImage($item_info->type, $item_info->no, $values['color_id'])->data->thumbnail_url;
+        }
+
         $item = self::firstOrCreate([
             'item_info_id' => $item_info->id,
             'color_id' => $values['color_id'],
+            'colored_image_url' => $colored_image_url,
         ]);
 
         PriceGuide::createUsingApi($item);

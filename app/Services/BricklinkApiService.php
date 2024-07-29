@@ -73,4 +73,16 @@ class BricklinkApiService
         $response = $this->client->get("colors");
         return json_decode($response->getBody()->getContents());
     }
+
+    public function getItemImage(string $item_type, string $item_no, int|null $color_id)
+    {
+        $uri = "items/$item_type/$item_no/images";
+
+        if ($color_id) {
+            $uri .= "/$color_id";
+        }
+
+        $response = $this->client->get($uri);
+        return json_decode($response->getBody()->getContents());
+    }
 }

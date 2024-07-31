@@ -22,7 +22,6 @@ import { IconPlus, IconRefresh, IconTrash } from "@tabler/icons-react";
 import { PriceGuideText } from "../../Components/Item/Price/PriceGuide";
 import axios from "axios";
 import parse from "html-react-parser";
-import { PriceDetail } from "../../Components/Item/Price/PriceDetail";
 import { PriceGraph } from "../../Components/Item/Price/PriceGraph";
 import { Color } from "@/types/color";
 import { modals } from "@mantine/modals";
@@ -199,8 +198,6 @@ export default function ({ watched_items, colors, auth }: Props) {
                             </Flex>
 
                             <Flex gap={8}>
-                                <PriceDetail price_guide={item.price_guide} />
-
                                 <PriceGraph
                                     currency_code={
                                         item.price_guide.currency_code

@@ -5,10 +5,10 @@ import { Item } from "@/types/item";
 import {
     ActionIcon,
     Affix,
+    AspectRatio,
     Box,
     Drawer,
     Flex,
-    Group,
     Image,
     Paper,
     Skeleton,
@@ -138,14 +138,17 @@ export default function ({ watched_items, colors, auth }: Props) {
                             justify={"space-between"}
                         >
                             <Flex columnGap={40}>
-                                <Box w={"100px"} h={"80px"}>
+                                <AspectRatio
+                                    ratio={100 / 80}
+                                    maw={100}
+                                    mah={80}
+                                >
                                     <Image
                                         fit="contain"
-                                        h={"100%"}
                                         src={prepareImageURL(item)}
                                         alt={item.item_info.name + " image"}
                                     />
-                                </Box>
+                                </AspectRatio>
 
                                 <Stack w={"80%"}>
                                     <Flex gap={10} align={"center"}>

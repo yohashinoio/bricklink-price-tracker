@@ -202,6 +202,9 @@ export default function ({ watched_items, colors, auth }: Props) {
                                 <PriceDetail price_guide={item.price_guide} />
 
                                 <PriceGraph
+                                    currency_code={
+                                        item.price_guide.currency_code
+                                    }
                                     price_details={
                                         item.price_guide.price_details
                                     }

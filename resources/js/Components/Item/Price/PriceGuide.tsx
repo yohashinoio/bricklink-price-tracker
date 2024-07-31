@@ -1,8 +1,8 @@
-import { NewBadge } from "@/Pages/Item/NewBadge";
-import { UsedBadge } from "@/Pages/Item/UsedBadge";
 import { PriceGuide } from "@/types/item";
 import { Group, Text } from "@mantine/core";
 import React from "react";
+import { NewBadge } from "./NewBadge";
+import { UsedBadge } from "./UsedBadge";
 
 type Props = {
     price_guide: PriceGuide;

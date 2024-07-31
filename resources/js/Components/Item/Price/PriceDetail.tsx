@@ -1,17 +1,9 @@
-import { NewBadge } from "@/Pages/Item/NewBadge";
-import { UsedBadge } from "@/Pages/Item/UsedBadge";
 import { PriceGuide } from "@/types/item";
-import {
-    Popover,
-    Stack,
-    Title,
-    Flex,
-    Text,
-    ActionIcon,
-    Group,
-} from "@mantine/core";
+import { Popover, Stack, Title, Text, ActionIcon, Group } from "@mantine/core";
 import { IconCoins } from "@tabler/icons-react";
 import React from "react";
+import { NewBadge } from "./NewBadge";
+import { UsedBadge } from "./UsedBadge";
 
 type Props = {
     price_guide: PriceGuide;

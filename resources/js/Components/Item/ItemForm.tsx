@@ -5,7 +5,6 @@ import {
     Group,
     LoadingOverlay,
     Select,
-    SelectProps,
     Stack,
     Stepper,
     Text,

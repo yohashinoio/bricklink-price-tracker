@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Item::class, 'watched_items')->withTimestamps();
     }
+
+    public function desiredConditions(): HasMany
+    {
+        return $this->hasMany(DesiredCondition::class);
+    }
 }

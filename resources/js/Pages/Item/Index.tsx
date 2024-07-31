@@ -6,6 +6,7 @@ import {
     ActionIcon,
     Affix,
     AspectRatio,
+    Badge,
     Box,
     Drawer,
     Flex,
@@ -26,11 +27,32 @@ import { PriceGraph } from "../../Components/Item/Price/PriceGraph";
 import { Color } from "@/types/color";
 import { modals } from "@mantine/modals";
 import React from "react";
+import { ThereIsWhatYouWantBadge } from "@/Components/Item/Price/ThereIsWhatYouWantBadge";
+import { DesiredConditionForm } from "@/Components/Item/DesiredConditionForm";
+import BigNumber from "bignumber.js";
 
 type Props = {
     watched_items: Item[];
     colors: Color[];
 } & PageProps;
+
+const isSatisfyDesire = (item: Item): boolean => {
+    const desired_condition = item.desired_condition;
+
+    if (!desired_condition) return false;
+
+    return item.price_guide.price_details.some((price_detail) => {
+        // Using bignumber.js to compare floating point numbers.
+        const big1 = new BigNumber(price_detail.unit_price);
+        const big2 = new BigNumber(desired_condition.unit_price);
+        return (
+            big1.lte(big2) &&
+            price_detail.quantity >= desired_condition.quantity &&
+            price_detail.shipping_available ===
+                desired_condition.shipping_available
+        );
+    });
+};
 
 const getHighResPartImage = (image_url: string) => {
     if (!image_url.includes("/P/"))
@@ -119,7 +141,7 @@ export default function ({ watched_items, colors, auth }: Props) {
                 onClose={close}
                 zIndex={999} // Ensure the drawer is on top of add button
             >
-                <ItemForm onComplete={() => window.location.reload()} />
+                <ItemForm />
             </Drawer>
 
             {/* Floated + button */}
@@ -201,45 +223,70 @@ export default function ({ watched_items, colors, auth }: Props) {
                                 </Stack>
                             </Flex>
 
-                            <Flex gap={8}>
-                                <PriceGraph
-                                    currency_code={
-                                        item.price_guide.currency_code
-                                    }
-                                    price_details={
-                                        item.price_guide.price_details
-                                    }
-                                />
-
-                                <ActionIcon
-                                    size="lg"
-                                    variant="default"
-                                    aria-label={"Update Price"}
-                                    onClick={() => openUpdateConfirmModal(item)}
-                                >
-                                    <IconRefresh
-                                        style={{
-                                            width: "70%",
-                                            height: "70%",
-                                        }}
-                                        stroke={1.5}
+                            <Flex direction="column" justify={"space-between"}>
+                                <Flex gap={8} justify={"flex-end"}>
+                                    <DesiredConditionForm
+                                        item_id={item.id}
+                                        current_desire={item.desired_condition}
                                     />
-                                </ActionIcon>
 
-                                <ActionIcon
-                                    size="lg"
-                                    variant="default"
-                                    aria-label={"Delete Item"}
-                                    onClick={() => openDeleteConfirmModal(item)}
-                                >
-                                    <IconTrash
-                                        style={{
-                                            width: "70%",
-                                            height: "70%",
-                                        }}
-                                        stroke={1.5}
+                                    <PriceGraph
+                                        currency_code={
+                                            item.price_guide.currency_code
+                                        }
+                                        price_details={
+                                            item.price_guide.price_details
+                                        }
                                     />
-                                </ActionIcon>
+
+                                    <ActionIcon
+                                        size="lg"
+                                        variant="default"
+                                        aria-label={"Update Price"}
+                                        onClick={() =>
+                                            openUpdateConfirmModal(item)
+                                        }
+                                    >
+                                        <IconRefresh
+                                            style={{
+                                                width: "70%",
+                                                height: "70%",
+                                            }}
+                                            stroke={1.5}
+                                        />
+                                    </ActionIcon>
+
+                                    <ActionIcon
+                                        size="lg"
+                                        variant="default"
+                                        aria-label={"Delete Item"}
+                                        onClick={() =>
+                                            openDeleteConfirmModal(item)
+                                        }
+                                    >
+                                        <IconTrash
+                                            style={{
+                                                width: "70%",
+                                                height: "70%",
+                                            }}
+                                            stroke={1.5}
+                                        />
+                                    </ActionIcon>
+                                </Flex>
+
+                                <Flex justify={"flex-end"}>
+                                    {item.desired_condition ? (
+                                        <ThereIsWhatYouWantBadge
+                                            there_is_what_you_want={isSatisfyDesire(
+                                                item
+                                            )}
+                                        />
+                                    ) : (
+                                        <Badge color="gray">
+                                            Not configured
+                                        </Badge>
+                                    )}
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Paper>

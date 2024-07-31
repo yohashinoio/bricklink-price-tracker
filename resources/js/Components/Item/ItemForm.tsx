@@ -1,4 +1,5 @@
 import { Color } from "@/types/color";
+import { ValidationError } from "@/types/validation";
 import {
     Box,
     Button,
@@ -10,18 +11,9 @@ import {
     TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
 import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
 import React from "react";
-
-type ValidationError = {
-    [key: string]: string[];
-};
-
-type Props = {
-    onComplete?: () => void;
-};
 
 export const getColorDetail = (color_id: number): Promise<Color> => {
     return axios
@@ -51,8 +43,9 @@ const renderColorSelectOption = ({ option, checked }: any) => {
     );
 };
 
-export const ItemForm: React.FC<Props> = ({ onComplete }) => {
-    const [visible_loading, { toggle: toggleLoading }] = useDisclosure(false);
+export const ItemForm: React.FC = () => {
+    const [loading, setLoading] = React.useState(false);
+    const [next_step_loading, setNextStepLoading] = React.useState(false);
 
     const [active, setActive] = React.useState(0);
     const [color_completions, setColorCompletions] = React.useState<Color[]>(
@@ -73,8 +66,8 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
         }
     );
 
-    const complete = () => {
-        toggleLoading();
+    const onComplete = () => {
+        setLoading(true);
 
         const values = form.getValues();
 
@@ -87,15 +80,14 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
 
         axios
             .post(route("watched_items.store"), values)
-            .then(() => onComplete && onComplete())
+            .then(() => window.location.reload())
             .catch((error) => {
                 console.log(error);
                 setValidationErrors(error.response.data.errors);
                 if (validationErrors["type"] || validationErrors["no"])
                     setActive(0);
                 else if (validationErrors["color_id"]) setActive(1);
-            })
-            .finally(() => toggleLoading());
+            });
     };
 
     const nextStep = () => {
@@ -109,6 +101,8 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                 form.setFieldError("no", "Item number is required.");
                 return;
             }
+
+            setNextStepLoading(true);
 
             axios
                 .get(
@@ -142,10 +136,11 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                     form.setFieldError("no", "The item could not be found.");
 
                     console.error(err);
-                });
+                })
+                .finally(() => setNextStepLoading(false));
         }
 
-        if (active === 1) complete();
+        if (active === 1) onComplete();
     };
 
     const prevStep = () => {
@@ -183,7 +178,7 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
         <>
             <Box pos="relative">
                 <LoadingOverlay
-                    visible={visible_loading}
+                    visible={loading}
                     zIndex={1002}
                     overlayProps={{ radius: "sm", blur: 2 }}
                 />
@@ -247,7 +242,7 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                     <Button variant="default" onClick={prevStep}>
                         Back
                     </Button>
-                    <Button onClick={nextStep}>
+                    <Button onClick={nextStep} loading={next_step_loading}>
                         {active === 1 ? "Complete" : "Next step"}
                     </Button>
                 </Group>

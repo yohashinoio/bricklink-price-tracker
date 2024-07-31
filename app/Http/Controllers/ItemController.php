@@ -15,7 +15,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = auth()->user()->items()->with(["itemInfo", "priceGuide.priceDetails"])->get();
+        $items = auth()->user()->items()->with(["itemInfo", "priceGuide.priceDetails", "desiredCondition"])->get();
 
         $colors = [];
 

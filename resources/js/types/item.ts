@@ -1,3 +1,5 @@
+import { DesiredCondition } from "./desired_condition";
+
 type ItemInfo = {
     category_id: number;
     created_at: string;
@@ -49,4 +51,5 @@ export type Item = {
     price_guide: PriceGuide;
     color_id: number | null;
     colored_image_url: string;
+    desired_condition: DesiredCondition | undefined;
 };

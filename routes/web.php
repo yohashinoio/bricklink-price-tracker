@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\DesiredConditionController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ProfileController;
@@ -37,3 +38,5 @@ Route::post("prices/{item_id}", [PriceController::class, "update"])->middleware(
 
 Route::get("colors/known/{item_type}/{item_no}", [ColorController::class, "getKnownColors"])->middleware(["auth", "verified"])->name("colors.known");
 Route::get("colors/detail/{color_id}", [ColorController::class, "detail"])->middleware(["auth", "verified"])->name("colors.detail");
+
+Route::post("desired_conditions/{item_id}", [DesiredConditionController::class, "updateOrStore"])->middleware(["auth", "verified"])->name("desired_conditions.updateOrStore");

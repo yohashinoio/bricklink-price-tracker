@@ -14,7 +14,6 @@ import {
     CartesianGrid,
     Line,
     LineChart,
-    ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
@@ -84,53 +83,48 @@ const PriceLineChart: React.FC<Props> = ({ price_details, currency_code }) => {
     };
 
     return (
-        <ResponsiveContainer width={500} height={300}>
-            <LineChart data={price_details_with_serial}>
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+        <LineChart width={500} height={300} data={price_details_with_serial}>
+            <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
 
-                <Line
-                    name="Quantity"
-                    type="monotone"
-                    dataKey="quantity"
-                    stroke="#D3D3D3"
-                    dot={(props) => (
-                        <ShippingAvailableDot
-                            cx={props.cx}
-                            cy={props.cy}
-                            payload={props.payload}
-                        />
-                    )}
-                />
+            <Line
+                name="Quantity"
+                type="monotone"
+                dataKey="quantity"
+                stroke="#D3D3D3"
+                dot={(props) => (
+                    <ShippingAvailableDot
+                        cx={props.cx}
+                        cy={props.cy}
+                        payload={props.payload}
+                    />
+                )}
+            />
 
-                <XAxis
-                    dataKey="unit_price"
-                    domain={[
-                        x_domain_lower,
-                        Math.round(
-                            Math.max(
-                                ...price_details.map((x) => x.unit_price)
-                            ) + 50
-                        ),
-                    ]}
-                    tickFormatter={tickFormatter}
-                />
-                <YAxis
-                    dataKey="quantity"
-                    domain={[
-                        y_domain_lower,
-                        Math.round(
-                            Math.max(...price_details.map((x) => x.quantity)) +
-                                5
-                        ),
-                    ]}
-                    tickFormatter={tickFormatter}
-                />
+            <XAxis
+                dataKey="unit_price"
+                domain={[
+                    x_domain_lower,
+                    Math.round(
+                        Math.max(...price_details.map((x) => x.unit_price)) + 50
+                    ),
+                ]}
+                tickFormatter={tickFormatter}
+            />
+            <YAxis
+                dataKey="quantity"
+                domain={[
+                    y_domain_lower,
+                    Math.round(
+                        Math.max(...price_details.map((x) => x.quantity)) + 5
+                    ),
+                ]}
+                tickFormatter={tickFormatter}
+            />
 
-                <Tooltip
-                    content={<CustomToolTip currency_code={currency_code} />}
-                />
-            </LineChart>
-        </ResponsiveContainer>
+            <Tooltip
+                content={<CustomToolTip currency_code={currency_code} />}
+            />
+        </LineChart>
     );
 };
 

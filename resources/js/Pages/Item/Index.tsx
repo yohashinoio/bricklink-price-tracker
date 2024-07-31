@@ -48,8 +48,9 @@ const isSatisfyDesire = (item: Item): boolean => {
         return (
             big1.lte(big2) &&
             price_detail.quantity >= desired_condition.quantity &&
-            price_detail.shipping_available ===
-                desired_condition.shipping_available
+            (desired_condition.shipping_available
+                ? price_detail.shipping_available
+                : true)
         );
     });
 };

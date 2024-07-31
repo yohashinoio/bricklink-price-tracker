@@ -37,12 +37,12 @@ class ItemRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'type.required' => 'Type of item is required',
-            'type.string' => 'Type of item must be a string',
-            'type.in' => 'Type of item must be one of: MINIFIG, PART, SET, BOOK, GEAR, CATALOG, INSTRUCTION, UNSORTED_LOT, ORIGINAL_BOX',
-            'no.required' => 'Number of item is required',
-            'no.string' => 'Number of item must be a string',
-            'color_id.integer' => 'Color ID must be an integer',
+            'type.required' => 'Type of item is required.',
+            'type.string' => 'Type of item must be a string.',
+            'type.in' => 'Type of item must be one of: MINIFIG, PART, SET, BOOK, GEAR, CATALOG, INSTRUCTION, UNSORTED_LOT, ORIGINAL_BOX.',
+            'no.required' => 'Number of item is required.',
+            'no.string' => 'Number of item must be a string.',
+            'color_id.integer' => 'Color ID must be an integer.',
         ];
     }
 }

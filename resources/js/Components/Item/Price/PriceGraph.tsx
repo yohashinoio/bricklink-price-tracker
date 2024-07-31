@@ -14,6 +14,7 @@ import {
     CartesianGrid,
     Line,
     LineChart,
+    ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
@@ -38,8 +39,6 @@ const ShippingAvailableDot: React.FC<{
 const CustomToolTip = ({ active, payload, currency_code }: any) => {
     if (active && payload && payload.length) {
         const pl = payload[0].payload;
-
-        console.log(pl);
 
         return (
             <Card shadow="xl">
@@ -85,12 +84,8 @@ const PriceLineChart: React.FC<Props> = ({ price_details, currency_code }) => {
     };
 
     return (
-        <>
-            <LineChart
-                width={500}
-                height={300}
-                data={price_details_with_serial}
-            >
+        <ResponsiveContainer width={500} height={300}>
+            <LineChart data={price_details_with_serial}>
                 <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
 
                 <Line
@@ -135,7 +130,7 @@ const PriceLineChart: React.FC<Props> = ({ price_details, currency_code }) => {
                     content={<CustomToolTip currency_code={currency_code} />}
                 />
             </LineChart>
-        </>
+        </ResponsiveContainer>
     );
 };
 
@@ -176,6 +171,8 @@ export const PriceGraph: React.FC<Props> = ({
         Math.round(price_details_of_used.length * 0.8),
     ];
 
+    const chart_props = { currency_code: currency_code };
+
     return (
         <Popover position="bottom" withArrow shadow="md">
             <Popover.Target>
@@ -210,11 +207,11 @@ export const PriceGraph: React.FC<Props> = ({
                         />
                         <Box mt={30}>
                             <PriceLineChart
-                                currency_code={currency_code}
                                 price_details={price_details_of_new.slice(
                                     0,
                                     number_of_display_for_new
                                 )}
+                                {...chart_props}
                             />
                         </Box>
                     </Tabs.Panel>
@@ -232,11 +229,11 @@ export const PriceGraph: React.FC<Props> = ({
                         />
                         <Box mt={30}>
                             <PriceLineChart
-                                currency_code={currency_code}
                                 price_details={price_details_of_used.slice(
                                     0,
                                     number_of_display_for_used
                                 )}
+                                {...chart_props}
                             />
                         </Box>
                     </Tabs.Panel>

@@ -147,8 +147,8 @@ export default function ({ watched_items, colors, auth }: Props) {
                                     />
                                 </Box>
 
-                                <Stack>
-                                    <Group gap={10}>
+                                <Stack w={"80%"}>
+                                    <Flex gap={10} align={"center"}>
                                         <Title order={2} lineClamp={1}>
                                             {parse(item.item_info.name)}
                                         </Title>
@@ -169,6 +169,7 @@ export default function ({ watched_items, colors, auth }: Props) {
                                                     }}
                                                     w={16}
                                                     h={16}
+                                                    miw={16}
                                                     bg={
                                                         "#" +
                                                         colors.find(
@@ -180,7 +181,7 @@ export default function ({ watched_items, colors, auth }: Props) {
                                                 />
                                             </Tooltip>
                                         )}
-                                    </Group>
+                                    </Flex>
 
                                     <Skeleton
                                         visible={

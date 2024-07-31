@@ -7,12 +7,10 @@ import {
     Select,
     Stack,
     Stepper,
-    Text,
     TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { modals } from "@mantine/modals";
 import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
 import React from "react";
@@ -64,6 +62,17 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
         string | null
     >(null);
 
+    const form = useForm<{ type: string; no: string; color_id: number | null }>(
+        {
+            mode: "uncontrolled",
+            initialValues: {
+                type: "",
+                no: "",
+                color_id: null,
+            },
+        }
+    );
+
     const complete = () => {
         toggleLoading();
 
@@ -82,6 +91,9 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
             .catch((error) => {
                 console.log(error);
                 setValidationErrors(error.response.data.errors);
+                if (validationErrors["type"] || validationErrors["no"])
+                    setActive(0);
+                else if (validationErrors["color_id"]) setActive(1);
             })
             .finally(() => toggleLoading());
     };
@@ -89,12 +101,12 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
     const nextStep = () => {
         if (active === 0) {
             if (form.getValues().type === "") {
-                form.setFieldError("type", "Item type is required");
+                form.setFieldError("type", "Item type is required.");
                 return;
             }
 
             if (form.getValues().no === "") {
-                form.setFieldError("no", "Item number is required");
+                form.setFieldError("no", "Item number is required.");
                 return;
             }
 
@@ -124,6 +136,12 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                     Promise.all(promises).then(() =>
                         setActive((current) => current + 1)
                     );
+                })
+                .catch((err) => {
+                    // If it is an error, assume the item did not exist.
+                    form.setFieldError("no", "The item could not be found.");
+
+                    console.error(err);
                 });
         }
 
@@ -141,17 +159,6 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
 
     const [validationErrors, setValidationErrors] =
         React.useState<ValidationError>({});
-
-    const form = useForm<{ type: string; no: string; color_id: number | null }>(
-        {
-            mode: "uncontrolled",
-            initialValues: {
-                type: "",
-                no: "",
-                color_id: null,
-            },
-        }
-    );
 
     // Render validation errors
     (() => {

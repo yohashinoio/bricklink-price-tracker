@@ -129,13 +129,8 @@ class PriceGuide extends Model
 
     protected static function createPriceDetails(PriceGuide $price_guide, array $price_details_of_new, array $price_details_of_used)
     {
-        $createPriceDetails = function (PriceGuide $price_guide, array $price_details, string $new_or_used, int $quantity_created = 50) {
-            $count = 0;
-
+        $createPriceDetails = function (PriceGuide $price_guide, array $price_details, string $new_or_used) {
             foreach ($price_details as $pd) {
-                if ($quantity_created <= $count++)
-                    break;
-
                 PriceDetail::create([
                     'price_guide_id' => $price_guide->id,
                     'new_or_used' => $new_or_used,

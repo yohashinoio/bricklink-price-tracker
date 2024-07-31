@@ -64,21 +64,6 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
         string | null
     >(null);
 
-    const openNoColorConfirmModal = () =>
-        modals.openConfirmModal({
-            title: "The item didn't have a color",
-            centered: true,
-            children: (
-                <Text size="sm">
-                    The item you entered did not have a color. Therefore, skip
-                    and complete the color selection. Are you sure?
-                </Text>
-            ),
-            labels: { confirm: "Complete", cancel: "Cancel" },
-            zIndex: 1001,
-            onConfirm: () => complete(),
-        });
-
     const complete = () => {
         toggleLoading();
 
@@ -121,33 +106,24 @@ export const ItemForm: React.FC<Props> = ({ onComplete }) => {
                     ])
                 )
                 .then((knowns) => {
-                    // If there are no known colors, skip the color selection step
-                    if (
-                        knowns.data.length === 1 &&
-                        knowns.data[0].color_id === 0
-                    ) {
-                        openNoColorConfirmModal();
-                        setActive(() => 0);
-                    } else {
-                        let promises = [];
+                    let promises = [];
 
-                        for (const known of knowns.data) {
-                            promises.push(
-                                getColorDetail(known.color_id).then((color) => {
-                                    if (color.color_code && color.color_name) {
-                                        setColorCompletions((current) => [
-                                            ...current,
-                                            color,
-                                        ]);
-                                    }
-                                })
-                            );
-                        }
-
-                        Promise.all(promises).then(() =>
-                            setActive((current) => current + 1)
+                    for (const known of knowns.data) {
+                        promises.push(
+                            getColorDetail(known.color_id).then((color) => {
+                                if (color.color_code && color.color_name) {
+                                    setColorCompletions((current) => [
+                                        ...current,
+                                        color,
+                                    ]);
+                                }
+                            })
                         );
                     }
+
+                    Promise.all(promises).then(() =>
+                        setActive((current) => current + 1)
+                    );
                 });
         }
 

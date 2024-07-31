@@ -3,11 +3,8 @@ import {
     ActionIcon,
     Box,
     Card,
-    Container,
-    Group,
     Popover,
     Slider,
-    Stack,
     Tabs,
     Text,
 } from "@mantine/core";

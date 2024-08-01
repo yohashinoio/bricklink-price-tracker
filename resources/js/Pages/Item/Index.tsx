@@ -2,7 +2,7 @@ import { ItemForm } from "@/Components/Item/ItemForm";
 import { Layout } from "@/Layouts/Layout";
 import { PageProps } from "@/types";
 import { Item } from "@/types/item";
-import { ActionIcon, Affix, Drawer, Stack } from "@mantine/core";
+import { ActionIcon, Affix, Box, Drawer, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 
@@ -78,39 +78,41 @@ export default function ({
 
     return (
         <Layout auth={auth}>
-            <Drawer
-                position={"right"}
-                opened={opened}
-                onClose={close}
-                zIndex={999} // Ensure the drawer is on top of add button
-            >
-                <ItemForm />
-            </Drawer>
+            <Box w={"100%"}>
+                <Drawer
+                    position={"right"}
+                    opened={opened}
+                    onClose={close}
+                    zIndex={999} // Ensure the drawer is on top of add button
+                >
+                    <ItemForm />
+                </Drawer>
 
-            {/* Floated button */}
-            <Affix position={{ bottom: 40, right: 40 }}>
-                <ActionIcon onClick={open} radius="xl" size={60}>
-                    <IconPlus stroke={1.5} size={30} />
-                </ActionIcon>
-            </Affix>
+                {/* Floated button */}
+                <Affix position={{ bottom: 40, right: 40 }}>
+                    <ActionIcon onClick={open} radius="xl" size={60}>
+                        <IconPlus stroke={1.5} size={30} />
+                    </ActionIcon>
+                </Affix>
 
-            <DndContext
-                collisionDetection={closestCenter}
-                modifiers={[restrictToVerticalAxis]}
-                onDragEnd={onDragEnd}
-            >
-                <SortableContext items={items}>
-                    <Stack>
-                        {items.map((item) => (
-                            <ItemCard
-                                key={item.id}
-                                item={item}
-                                colors={colors}
-                            />
-                        ))}
-                    </Stack>
-                </SortableContext>
-            </DndContext>
+                <DndContext
+                    collisionDetection={closestCenter}
+                    modifiers={[restrictToVerticalAxis]}
+                    onDragEnd={onDragEnd}
+                >
+                    <SortableContext items={items}>
+                        <Stack>
+                            {items.map((item) => (
+                                <ItemCard
+                                    key={item.id}
+                                    item={item}
+                                    colors={colors}
+                                />
+                            ))}
+                        </Stack>
+                    </SortableContext>
+                </DndContext>
+            </Box>
         </Layout>
     );
 }

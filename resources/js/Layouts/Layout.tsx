@@ -1,6 +1,6 @@
 import { PageProps } from "@/types";
 import { router } from "@inertiajs/react";
-import { Button, Container, Flex, Menu, rem, Stack } from "@mantine/core";
+import { Box, Button, Flex, Menu, rem } from "@mantine/core";
 import { IconEdit, IconLogout } from "@tabler/icons-react";
 import React from "react";
 
@@ -10,7 +10,7 @@ type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = ({ children, auth }) => {
     return (
-        <Stack m={20}>
+        <Flex direction={"column"} m={20} gap={10}>
             <Flex justify={"end"}>
                 <Menu shadow="md" width={200}>
                     <Menu.Target>
@@ -43,9 +43,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, auth }) => {
                 </Menu>
             </Flex>
 
-            <Container w={"80%"} size={"xl"}>
-                {children}
-            </Container>
-        </Stack>
+            <Flex justify={"center"}>
+                <Box w={"60svw"}>{children}</Box>
+            </Flex>
+        </Flex>
     );
 };

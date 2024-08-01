@@ -6,7 +6,6 @@ import {
     ActionIcon,
     Affix,
     AspectRatio,
-    Badge,
     Box,
     Drawer,
     Flex,
@@ -27,7 +26,7 @@ import { PriceGraph } from "../../Components/Item/Price/PriceGraph";
 import { Color } from "@/types/color";
 import { modals } from "@mantine/modals";
 import React from "react";
-import { ThereIsWhatYouWantBadge } from "@/Components/Item/Price/ThereIsWhatYouWantBadge";
+import { SatisfiedBadge } from "@/Components/Item/Price/SatisfiedBadge";
 import { DesiredConditionForm } from "@/Components/Item/DesiredConditionForm";
 import BigNumber from "bignumber.js";
 
@@ -36,23 +35,53 @@ type Props = {
     colors: Color[];
 } & PageProps;
 
-const isSatisfyDesire = (item: Item): boolean => {
+export type Satisfieds = {
+    price_satisfied: boolean;
+    price_quantity_satisfied: boolean;
+};
+
+const isDesireSatisfied = (item: Item): Satisfieds | null => {
     const desired_condition = item.desired_condition;
 
-    if (!desired_condition) return false;
+    if (!desired_condition) return null;
 
-    return item.price_guide.price_details.some((price_detail) => {
-        // Using bignumber.js to compare floating point numbers.
-        const big1 = new BigNumber(price_detail.unit_price);
-        const big2 = new BigNumber(desired_condition.unit_price);
-        return (
-            big1.lte(big2) &&
-            price_detail.quantity >= desired_condition.quantity &&
-            (desired_condition.shipping_available
-                ? price_detail.shipping_available
-                : true)
-        );
-    });
+    const satisfieds: Satisfieds = {
+        price_satisfied: false,
+        price_quantity_satisfied: false,
+    };
+
+    satisfieds.price_satisfied = item.price_guide.price_details.some(
+        (price_detail) => {
+            // Using bignumber.js to compare floating point numbers.
+            const big1 = new BigNumber(price_detail.unit_price);
+            const big2 = new BigNumber(desired_condition.unit_price);
+
+            return (
+                big1.lte(big2) &&
+                (desired_condition.shipping_available
+                    ? price_detail.shipping_available
+                    : true)
+            );
+        }
+    );
+
+    satisfieds.price_quantity_satisfied = item.price_guide.price_details.some(
+        (price_detail) => {
+            // Using bignumber.js to compare floating point numbers.
+            const big1 = new BigNumber(price_detail.unit_price);
+            const big2 = new BigNumber(desired_condition.unit_price);
+
+            return (
+                big1.lte(big2) &&
+                price_detail.quantity >= desired_condition.quantity &&
+                (desired_condition.shipping_available
+                    ? price_detail.shipping_available
+                    : true)
+            );
+        }
+    );
+
+    return satisfieds;
 };
 
 const getHighResPartImage = (image_url: string) => {
@@ -276,17 +305,9 @@ export default function ({ watched_items, colors, auth }: Props) {
                                 </Flex>
 
                                 <Flex justify={"flex-end"}>
-                                    {item.desired_condition ? (
-                                        <ThereIsWhatYouWantBadge
-                                            there_is_what_you_want={isSatisfyDesire(
-                                                item
-                                            )}
-                                        />
-                                    ) : (
-                                        <Badge color="gray">
-                                            Not configured
-                                        </Badge>
-                                    )}
+                                    <SatisfiedBadge
+                                        satisfieds={isDesireSatisfied(item)}
+                                    />
                                 </Flex>
                             </Flex>
                         </Flex>

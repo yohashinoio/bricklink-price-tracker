@@ -30,6 +30,7 @@ export default function ({
     items: items_from_props,
     watched_items,
     colors,
+    auth,
 }: Props) {
     const [items, setItems] = React.useState(
         items_from_props
@@ -76,7 +77,7 @@ export default function ({
     };
 
     return (
-        <Layout>
+        <Layout auth={auth}>
             <Drawer
                 position={"right"}
                 opened={opened}

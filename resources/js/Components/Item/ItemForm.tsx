@@ -13,6 +13,7 @@ import {
 import { useForm } from "@mantine/form";
 import { IconCheck } from "@tabler/icons-react";
 import axios from "axios";
+import { set } from "lodash";
 import React from "react";
 
 export const getColorDetail = (color_id: number): Promise<Color> => {
@@ -117,6 +118,16 @@ export const ItemForm: React.FC = () => {
                     ])
                 )
                 .then((knowns) => {
+                    if (
+                        knowns.data.length === 1 &&
+                        knowns.data[0].color_id === 0
+                    ) {
+                        // The item doesn't have color.
+                        setNextStepLoading(false);
+                        setActive(1);
+                        return;
+                    }
+
                     let promises = [];
                     let color_completions_buffer: typeof color_completions = [];
 

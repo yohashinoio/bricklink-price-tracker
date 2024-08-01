@@ -1,5 +1,5 @@
-import { MatchState } from "@/Pages/Item/Index";
 import { Badge } from "@mantine/core";
+import { MatchState } from "../ItemCard";
 
 export const MatchStateBadge: React.FC<{
     match_state: MatchState | null;

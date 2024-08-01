@@ -56,12 +56,6 @@ const CustomToolTip = ({ active, payload, currency_code }: any) => {
 };
 
 const PriceLineChart: React.FC<Props> = ({ price_details, currency_code }) => {
-    const price_details_with_serial = price_details.map(
-        (price_detail, index) => {
-            return { ...price_detail, serial: index + 1 };
-        }
-    );
-
     const x_domain_lower = (() => {
         const n = Math.round(
             Math.min(...price_details.map((x) => x.unit_price)) - 50
@@ -83,7 +77,7 @@ const PriceLineChart: React.FC<Props> = ({ price_details, currency_code }) => {
     };
 
     return (
-        <LineChart width={500} height={300} data={price_details_with_serial}>
+        <LineChart width={500} height={300} data={price_details}>
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
 
             <Line
@@ -132,15 +126,21 @@ export const PriceGraph: React.FC<Props> = ({
     price_details,
     currency_code,
 }) => {
-    const price_details_of_new = price_details.filter(
-        (price_detail) => price_detail.new_or_used === "N"
-    );
-    price_details_of_new.sort((a, b) => a.unit_price - b.unit_price);
+    const price_details_of_new = React.useMemo(() => {
+        const filtered = price_details.filter(
+            (price_detail) => price_detail.new_or_used === "N"
+        );
 
-    const price_details_of_used = price_details.filter(
-        (price_detail) => price_detail.new_or_used === "U"
-    );
-    price_details_of_used.sort((a, b) => a.unit_price - b.unit_price);
+        return filtered.sort((a, b) => a.unit_price - b.unit_price);
+    }, [price_details]);
+
+    const price_details_of_used = React.useMemo(() => {
+        const filtered = price_details.filter(
+            (price_detail) => price_detail.new_or_used === "U"
+        );
+
+        return filtered.sort((a, b) => a.unit_price - b.unit_price);
+    }, [price_details]);
 
     const [number_of_display_for_new, setNumberOfDisplayForNew] =
         React.useState(

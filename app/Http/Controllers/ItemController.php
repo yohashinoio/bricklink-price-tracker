@@ -15,7 +15,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = auth()->user()->items()->with(["itemInfo", "priceGuide.priceDetails", "desiredCondition"])->get();
+        $items = auth()->user()->items()->with(["itemInfo", "priceGuide.priceDetails"])->get();
+
+        $desired_conditions = auth()->user()->watchedItems()->with(["desiredCondition"])->get();
 
         $colors = [];
 
@@ -24,7 +26,10 @@ class ItemController extends Controller
                 array_push($colors, Color::where('color_id', $item->color_id)->first());
         }
 
-        return Inertia::render("Item/Index", ["watched_items" => $items, "colors" => $colors]);
+        return Inertia::render(
+            "Item/Index",
+            ["watched_items" => $items, "desired_conditions" => $desired_conditions, "colors" => $colors]
+        );
     }
 
     /**

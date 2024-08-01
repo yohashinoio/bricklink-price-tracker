@@ -18,6 +18,16 @@ return new class extends Migration
             $table->foreignId("item_id")->constrained("items")->cascadeOnDelete();
             $table->timestamps();
         });
+
+        Schema::create('desired_conditions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('watched_item_id')->constrained('watched_items')->cascadeOnDelete();
+            $table->decimal('unit_price')->comment('Price of the item in the desired condition');
+            $table->integer('quantity')->comment('Quantity of the item in the desired condition');
+            $table->boolean('shipping_available');
+            $table->boolean('include_used');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +35,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('desired_conditions');
         Schema::dropIfExists('watched_items');
     }
 };

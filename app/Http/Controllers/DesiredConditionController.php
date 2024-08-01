@@ -13,7 +13,9 @@ class DesiredConditionController extends Controller
     {
         $validated = $request->validated();
 
-        auth()->user()->desiredConditions()->updateOrCreate(['item_id' => $item_id], [
+        $watched_item = auth()->user()->watchedItems()->where('item_id', $item_id)->first();
+
+        $watched_item->desiredCondition()->updateOrCreate(['watched_item_id' => $watched_item->id], [
             'unit_price' => $validated['unit_price'],
             'quantity' => $validated['quantity'],
             'shipping_available' => $validated['shipping_available'],

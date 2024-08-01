@@ -11,7 +11,7 @@ class DesiredCondition extends Model
     use HasFactory;
 
     protected $fillable = [
-        'item_id',
+        'watched_item_id',
         'unit_price',
         'quantity',
         'shipping_available',

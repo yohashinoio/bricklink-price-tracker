@@ -29,11 +29,6 @@ class Item extends Model
         return $this->hasOne(PriceGuide::class);
     }
 
-    public function desiredCondition(): HasOne
-    {
-        return $this->hasOne(DesiredCondition::class);
-    }
-
     /**
      * Overrided firstOrCreate method to fetch price guide from Bricklink API.
      */

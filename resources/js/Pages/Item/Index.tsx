@@ -12,14 +12,29 @@ import { ItemCard } from "@/Components/Item/ItemCard";
 import { closestCenter, DndContext, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { DesiredCondition } from "@/types/desired_condition";
 
 type Props = {
     watched_items: Item[];
+    desired_conditions: {
+        item_id: number;
+        desired_condition: DesiredCondition;
+    }[];
     colors: Color[];
 } & PageProps;
 
-export default function ({ watched_items, colors }: Props) {
-    console.log(watched_items);
+export default function ({ watched_items, desired_conditions, colors }: Props) {
+    watched_items = React.useMemo(
+        () =>
+            watched_items.map((item) => {
+                const dc = desired_conditions.find(
+                    (dc) => dc.item_id === item.id
+                );
+                if (dc) item.desired_condition = dc.desired_condition;
+                return item;
+            }),
+        []
+    );
 
     const [items, setItems] = React.useState(watched_items);
     const [opened, { open, close }] = useDisclosure();

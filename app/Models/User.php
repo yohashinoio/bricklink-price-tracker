@@ -49,11 +49,11 @@ class User extends Authenticatable
 
     public function items(): BelongsToMany
     {
-        return $this->belongsToMany(Item::class, 'watched_items')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'watched_items');
     }
 
-    public function desiredConditions(): HasMany
+    public function watchedItems(): HasMany
     {
-        return $this->hasMany(DesiredCondition::class);
+        return $this->hasMany(WatchedItem::class);
     }
 }

@@ -48,9 +48,14 @@ export const ItemForm: React.FC = () => {
     const [next_step_loading, setNextStepLoading] = React.useState(false);
 
     const [active, setActive] = React.useState(0);
-    const [color_completions, setColorCompletions] = React.useState<Color[]>(
-        []
-    );
+
+    const [color_completions, setColorCompletions] = React.useState<
+        {
+            for_select: { value: string; label: string; color_code: string };
+            color_id: number;
+        }[]
+    >([]);
+
     const [selected_color_id, setSelectedColorId] = React.useState<
         string | null
     >(null);
@@ -113,23 +118,27 @@ export const ItemForm: React.FC = () => {
                 )
                 .then((knowns) => {
                     let promises = [];
+                    let color_completions_buffer: typeof color_completions = [];
 
                     for (const known of knowns.data) {
                         promises.push(
                             getColorDetail(known.color_id).then((color) => {
-                                if (color.color_code && color.color_name) {
-                                    setColorCompletions((current) => [
-                                        ...current,
-                                        color,
-                                    ]);
-                                }
+                                color_completions_buffer.push({
+                                    for_select: {
+                                        value: color.color_id.toString(),
+                                        label: color.color_name,
+                                        color_code: color.color_code,
+                                    },
+                                    color_id: color.color_id,
+                                });
                             })
                         );
                     }
 
-                    Promise.all(promises).then(() =>
-                        setActive((current) => current + 1)
-                    );
+                    Promise.all(promises).then(() => {
+                        setColorCompletions(color_completions_buffer);
+                        setActive((current) => current + 1);
+                    });
                 })
                 .catch((err) => {
                     // If it is an error, assume the item did not exist.
@@ -167,12 +176,6 @@ export const ItemForm: React.FC = () => {
             if (errors) form.setFieldError(key, errors[0]);
         });
     })();
-
-    const data = color_completions.map((color) => ({
-        value: color.color_id.toString(),
-        label: color.color_name,
-        color_code: color.color_code,
-    }));
 
     return (
         <>
@@ -224,12 +227,14 @@ export const ItemForm: React.FC = () => {
                         description="Select color"
                     >
                         <Select
-                            withAsterisk
+                            required
                             label="Select color"
                             placeholder="Select color"
                             onChange={(value) => setSelectedColorId(value)}
                             value={selected_color_id}
-                            data={data}
+                            data={color_completions.map(
+                                (completion) => completion.for_select
+                            )}
                             comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
                             renderOption={renderColorSelectOption}
                             searchable

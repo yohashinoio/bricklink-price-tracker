@@ -13,30 +13,41 @@ import { closestCenter, DndContext, DragEndEvent } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { DesiredCondition } from "@/types/desired_condition";
+import axios from "axios";
 
 type Props = {
-    watched_items: Item[];
-    desired_conditions: {
+    items: Item[];
+    watched_items: {
+        id: number;
         item_id: number;
+        position: number;
         desired_condition: DesiredCondition;
     }[];
     colors: Color[];
 } & PageProps;
 
-export default function ({ watched_items, desired_conditions, colors }: Props) {
-    watched_items = React.useMemo(
-        () =>
-            watched_items.map((item) => {
-                const dc = desired_conditions.find(
-                    (dc) => dc.item_id === item.id
-                );
-                if (dc) item.desired_condition = dc.desired_condition;
-                return item;
-            }),
-        []
+export default function ({
+    items: items_from_props,
+    watched_items,
+    colors,
+}: Props) {
+    const [items, setItems] = React.useState(
+        items_from_props.map((item) => {
+            const wi = watched_items.find((dc) => dc.item_id === item.id);
+            if (wi) {
+                item.desired_condition = wi.desired_condition;
+                item.position = wi.position;
+                item.watched_item_id = wi.id;
+            }
+            return item;
+        })
     );
 
-    const [items, setItems] = React.useState(watched_items);
+    // Sort items by position
+    React.useEffect(() => {
+        setItems(items.sort((a, b) => a.position - b.position));
+    }, []);
+
     const [opened, { open, close }] = useDisclosure();
 
     const onDragEnd = (event: DragEndEvent) => {
@@ -45,7 +56,25 @@ export default function ({ watched_items, desired_conditions, colors }: Props) {
 
         const old_idx = items.findIndex((item) => item.id === active.id);
         const new_idx = items.findIndex((item) => item.id === over.id);
-        setItems(arrayMove(items, old_idx, new_idx));
+
+        const moved = arrayMove(items, old_idx, new_idx);
+
+        // Update position in backend
+        moved.forEach((item, idx) => {
+            axios
+                .post(
+                    route(
+                        "watched_items.update_position",
+                        item.watched_item_id
+                    ),
+                    { position: idx + 1 }
+                )
+                .catch((err) => {
+                    console.error(err);
+                });
+        });
+
+        setItems(moved);
     };
 
     return (

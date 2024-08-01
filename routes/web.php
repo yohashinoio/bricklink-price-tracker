@@ -40,3 +40,5 @@ Route::get("colors/known/{item_type}/{item_no}", [ColorController::class, "getKn
 Route::get("colors/detail/{color_id}", [ColorController::class, "detail"])->middleware(["auth", "verified"])->name("colors.detail");
 
 Route::post("desired_conditions/{item_id}", [DesiredConditionController::class, "updateOrStore"])->middleware(["auth", "verified"])->name("desired_conditions.updateOrStore");
+
+Route::post("watched_items/update_position/{watched_item_id}", [WatchedItemController::class, "updatePosition"])->middleware(["auth", "verified"])->name("watched_items.update_position");

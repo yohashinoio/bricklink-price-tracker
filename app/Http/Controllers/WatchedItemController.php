@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemRequest;
+use App\Http\Requests\PositionRequest;
 use App\Models\Item;
 use App\Models\ItemInfo;
 use App\Models\WatchedItem;
@@ -40,10 +41,30 @@ class WatchedItemController extends Controller
 
             $item = Item::firstOrCreateWithPriceGuide($validated, $item_info);
 
+            $max_position = auth()->user()->watchedItems()->max('position');
+
+            if ($max_position === null) {
+                $position = 1;
+            } else {
+                $position = $max_position + 1;
+            }
+
             // Link items and users.
             // syncWithoutDetaching can be used to sync items without removing relationships to other items which are already in sync.
-            $request->user()->items()->syncWithoutDetaching($item);
+            $request->user()->items()->syncWithoutDetaching([$item->id => ['position' => $position]]);
         });
+    }
+
+    public function updatePosition(PositionRequest $request, int $watched_item_id)
+    {
+        $validated = $request->validated();
+
+        $watched_items = auth()->user()->watchedItems();
+
+        $target = $watched_items->find($watched_item_id);
+
+        $target->position = $validated['position'];
+        $target->save();
     }
 
     /**

@@ -52,4 +52,6 @@ export type Item = {
     color_id: number | null;
     colored_image_url: string;
     desired_condition: DesiredCondition | undefined;
+    watched_item_id: number;
+    position: number;
 };

@@ -17,7 +17,7 @@ class ItemController extends Controller
     {
         $items = auth()->user()->items()->with(["itemInfo", "priceGuide.priceDetails"])->get();
 
-        $desired_conditions = auth()->user()->watchedItems()->with(["desiredCondition"])->get();
+        $watched_items = auth()->user()->watchedItems()->with(["desiredCondition"])->get();
 
         $colors = [];
 
@@ -28,7 +28,7 @@ class ItemController extends Controller
 
         return Inertia::render(
             "Item/Index",
-            ["watched_items" => $items, "desired_conditions" => $desired_conditions, "colors" => $colors]
+            ["items" => $items, "watched_items" => $watched_items, "colors" => $colors]
         );
     }
 

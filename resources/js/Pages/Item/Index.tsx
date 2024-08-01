@@ -32,21 +32,19 @@ export default function ({
     colors,
 }: Props) {
     const [items, setItems] = React.useState(
-        items_from_props.map((item) => {
-            const wi = watched_items.find((dc) => dc.item_id === item.id);
-            if (wi) {
-                item.desired_condition = wi.desired_condition;
-                item.position = wi.position;
-                item.watched_item_id = wi.id;
-            }
-            return item;
-        })
+        items_from_props
+            .map((item) => {
+                const wi = watched_items.find((dc) => dc.item_id === item.id);
+                if (wi) {
+                    item.desired_condition = wi.desired_condition;
+                    item.position = wi.position;
+                    item.watched_item_id = wi.id;
+                }
+                return item;
+            })
+            // Sort by position
+            .sort((a, b) => a.position - b.position)
     );
-
-    // Sort items by position
-    React.useEffect(() => {
-        setItems(items.sort((a, b) => a.position - b.position));
-    }, []);
 
     const [opened, { open, close }] = useDisclosure();
 

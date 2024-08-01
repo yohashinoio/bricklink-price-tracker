@@ -26,31 +26,31 @@ import { PriceGraph } from "../../Components/Item/Price/PriceGraph";
 import { Color } from "@/types/color";
 import { modals } from "@mantine/modals";
 import React from "react";
-import { SatisfiedBadge } from "@/Components/Item/Price/SatisfiedBadge";
 import { DesiredConditionForm } from "@/Components/Item/DesiredConditionForm";
 import BigNumber from "bignumber.js";
+import { MatchStateBadge } from "@/Components/Item/Price/MatchStateBadge";
 
 type Props = {
     watched_items: Item[];
     colors: Color[];
 } & PageProps;
 
-export type Satisfieds = {
-    price_satisfied: boolean;
-    price_quantity_satisfied: boolean;
+export type MatchState = {
+    price_matched: boolean;
+    price_quantity_matched: boolean;
 };
 
-const isDesireSatisfied = (item: Item): Satisfieds | null => {
+const isDesireConditionMatched = (item: Item): MatchState | null => {
     const desired_condition = item.desired_condition;
 
     if (!desired_condition) return null;
 
-    const satisfieds: Satisfieds = {
-        price_satisfied: false,
-        price_quantity_satisfied: false,
+    const match_state: MatchState = {
+        price_matched: false,
+        price_quantity_matched: false,
     };
 
-    satisfieds.price_satisfied = item.price_guide.price_details.some(
+    match_state.price_matched = item.price_guide.price_details.some(
         (price_detail) => {
             // Using bignumber.js to compare floating point numbers.
             const big1 = new BigNumber(price_detail.unit_price);
@@ -65,7 +65,7 @@ const isDesireSatisfied = (item: Item): Satisfieds | null => {
         }
     );
 
-    satisfieds.price_quantity_satisfied = item.price_guide.price_details.some(
+    match_state.price_quantity_matched = item.price_guide.price_details.some(
         (price_detail) => {
             // Using bignumber.js to compare floating point numbers.
             const big1 = new BigNumber(price_detail.unit_price);
@@ -81,7 +81,7 @@ const isDesireSatisfied = (item: Item): Satisfieds | null => {
         }
     );
 
-    return satisfieds;
+    return match_state;
 };
 
 const getHighResPartImage = (image_url: string) => {
@@ -305,8 +305,10 @@ export default function ({ watched_items, colors, auth }: Props) {
                                 </Flex>
 
                                 <Flex justify={"flex-end"}>
-                                    <SatisfiedBadge
-                                        satisfieds={isDesireSatisfied(item)}
+                                    <MatchStateBadge
+                                        match_state={isDesireConditionMatched(
+                                            item
+                                        )}
                                     />
                                 </Flex>
                             </Flex>

@@ -26,6 +26,7 @@ class DesiredConditionRequest extends FormRequest
             'unit_price' => ['required', 'numeric'],
             'quantity' => ['required', 'numeric'],
             'shipping_available' => ['required', 'boolean'],
+            'include_used' => ['required', 'boolean'],
         ];
     }
 
@@ -43,6 +44,7 @@ class DesiredConditionRequest extends FormRequest
             'quantity.numeric' => 'Quantity must be a numeric.',
             'shipping_available.required' => 'Shipping available is required.',
             'shipping_available.boolean' => 'Shipping available must be a boolean.',
+            'include_used.required' => 'Include used is required.',
         ];
     }
 }

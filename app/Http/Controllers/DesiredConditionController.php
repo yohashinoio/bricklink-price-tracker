@@ -17,6 +17,7 @@ class DesiredConditionController extends Controller
             'unit_price' => $validated['unit_price'],
             'quantity' => $validated['quantity'],
             'shipping_available' => $validated['shipping_available'],
+            'include_used' => $validated['include_used'],
         ]);
     }
 }

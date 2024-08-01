@@ -31,6 +31,7 @@ export const DesiredConditionForm: React.FC<{
         unit_price: number | null;
         quantity: number | null;
         shipping_available: boolean;
+        include_used: boolean;
     }>({
         mode: "uncontrolled",
         initialValues: {
@@ -39,6 +40,7 @@ export const DesiredConditionForm: React.FC<{
             shipping_available: current_desire
                 ? current_desire.shipping_available
                 : true,
+            include_used: current_desire ? current_desire.include_used : true,
         },
     });
 
@@ -134,6 +136,17 @@ export const DesiredConditionForm: React.FC<{
                                         "shipping_available"
                                     )}
                                     key={form.key("shipping_available")}
+                                />
+
+                                <Checkbox
+                                    defaultChecked={
+                                        current_desire
+                                            ? current_desire.include_used
+                                            : true
+                                    }
+                                    label="Include Used"
+                                    {...form.getInputProps("include_used")}
+                                    key={form.key("include_used")}
                                 />
 
                                 <Group justify="center" mt={4}>

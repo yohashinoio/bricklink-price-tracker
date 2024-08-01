@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('unit_price')->comment('Price of the item in the desired condition');
             $table->integer('quantity')->comment('Quantity of the item in the desired condition');
             $table->boolean('shipping_available');
+            $table->boolean('include_used');
             $table->timestamps();
         });
     }

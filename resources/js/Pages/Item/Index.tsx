@@ -1,7 +1,7 @@
 import { ItemForm } from "@/Components/Item/ItemForm";
 import { Layout } from "@/Layouts/Layout";
 import { PageProps } from "@/types";
-import { Item } from "@/types/item";
+import { Item, PriceDetail } from "@/types/item";
 import {
     ActionIcon,
     Affix,
@@ -27,8 +27,8 @@ import { Color } from "@/types/color";
 import { modals } from "@mantine/modals";
 import React from "react";
 import { DesiredConditionForm } from "@/Components/Item/DesiredConditionForm";
-import BigNumber from "bignumber.js";
 import { MatchStateBadge } from "@/Components/Item/Price/MatchStateBadge";
+import { preciseLte } from "@/common/decimal";
 
 type Props = {
     watched_items: Item[];
@@ -50,29 +50,33 @@ const isDesireConditionMatched = (item: Item): MatchState | null => {
         price_quantity_matched: false,
     };
 
-    match_state.price_matched = item.price_guide.price_details.some(
+    const filtered_price_details = (() => {
+        if (desired_condition.include_used)
+            return item.price_guide.price_details;
+
+        return item.price_guide.price_details.filter(
+            (detail) => detail.new_or_used === "N"
+        );
+    })();
+
+    console.log(filtered_price_details);
+
+    match_state.price_matched = filtered_price_details.some((price_detail) => {
+        return (
+            preciseLte(price_detail.unit_price, desired_condition.unit_price) &&
+            (desired_condition.shipping_available
+                ? price_detail.shipping_available
+                : true)
+        );
+    });
+
+    match_state.price_quantity_matched = filtered_price_details.some(
         (price_detail) => {
-            // Using bignumber.js to compare floating point numbers.
-            const big1 = new BigNumber(price_detail.unit_price);
-            const big2 = new BigNumber(desired_condition.unit_price);
-
             return (
-                big1.lte(big2) &&
-                (desired_condition.shipping_available
-                    ? price_detail.shipping_available
-                    : true)
-            );
-        }
-    );
-
-    match_state.price_quantity_matched = item.price_guide.price_details.some(
-        (price_detail) => {
-            // Using bignumber.js to compare floating point numbers.
-            const big1 = new BigNumber(price_detail.unit_price);
-            const big2 = new BigNumber(desired_condition.unit_price);
-
-            return (
-                big1.lte(big2) &&
+                preciseLte(
+                    price_detail.unit_price,
+                    desired_condition.unit_price
+                ) &&
                 price_detail.quantity >= desired_condition.quantity &&
                 (desired_condition.shipping_available
                     ? price_detail.shipping_available

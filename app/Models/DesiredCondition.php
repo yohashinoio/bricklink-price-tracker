@@ -15,5 +15,6 @@ class DesiredCondition extends Model
         'unit_price',
         'quantity',
         'shipping_available',
+        'include_used',
     ];
 }

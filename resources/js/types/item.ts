@@ -20,12 +20,12 @@ type ItemInfo = {
 
 export type PriceGuide = {
     item_id: number;
-    min_price: number;
-    min_price_of_new: number;
-    min_price_of_used: number;
-    max_price: number;
-    max_price_of_new: number;
-    max_price_of_used: number;
+    min_price: number | null;
+    min_price_of_new: number | null;
+    min_price_of_used: number | null;
+    max_price: number | null;
+    max_price_of_new: number | null;
+    max_price_of_used: number | null;
     avg_price_of_new: number;
     avg_price_of_used: number;
     unit_quantity_of_new: number;

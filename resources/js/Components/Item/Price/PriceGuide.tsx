@@ -9,18 +9,24 @@ type Props = {
 };
 
 export const PriceGuideText: React.FC<Props> = ({ price_guide }) => {
+    const out_of_stock_msg = "Out of stock";
+
     return (
         <Group>
             <Group gap={6}>
                 <NewBadge />
                 <Text>
-                    {price_guide.min_price_of_new} {price_guide.currency_code}
+                    {price_guide.min_price_of_new +
+                        " " +
+                        price_guide.currency_code || out_of_stock_msg}{" "}
                 </Text>
             </Group>
             <Group gap={6}>
                 <UsedBadge />
                 <Text>
-                    {price_guide.min_price_of_used} {price_guide.currency_code}
+                    {price_guide.min_price_of_used +
+                        " " +
+                        price_guide.currency_code || out_of_stock_msg}{" "}
                 </Text>
             </Group>
         </Group>

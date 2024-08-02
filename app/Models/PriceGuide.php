@@ -8,13 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-function getMinPrice(array $price_details): float
+/**
+ * If the price_details array is empty, return null.
+ */
+function getMinPrice(array $price_details): float|null
 {
+    if (empty($price_details))
+        return null;
+
     return min(array_column($price_details, 'unit_price'));
 }
 
-function getMaxPrice(array $price_details): float
+/**
+ * If the price_details array is empty, return null.
+ */
+function getMaxPrice(array $price_details): float|null
 {
+    if (empty($price_details))
+        return null;
+
     return max(array_column($price_details, 'unit_price'));
 }
 

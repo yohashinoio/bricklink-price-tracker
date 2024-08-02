@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
 
-            $table->decimal('min_price');
-            $table->decimal('min_price_of_new');
-            $table->decimal('min_price_of_used');
+            $table->decimal('min_price')->nullable();
+            $table->decimal('min_price_of_new')->nullable();
+            $table->decimal('min_price_of_used')->nullable();
 
-            $table->decimal('max_price');
-            $table->decimal('max_price_of_new');
-            $table->decimal('max_price_of_used');
+            $table->decimal('max_price')->nullable();
+            $table->decimal('max_price_of_new')->nullable();
+            $table->decimal('max_price_of_used')->nullable();
 
             $table->decimal('avg_price_of_new');
             $table->decimal('avg_price_of_used');

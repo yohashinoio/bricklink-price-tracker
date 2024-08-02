@@ -177,7 +177,6 @@ export const ItemForm: React.FC = () => {
 
     // Render validation errors
     (() => {
-        // If there are no validation errors, return
         if (Object.keys(validationErrors).length === 0) return;
 
         const keys = Object.keys(form.getValues());

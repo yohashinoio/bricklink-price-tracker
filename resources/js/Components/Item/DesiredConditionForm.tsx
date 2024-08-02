@@ -70,7 +70,7 @@ export const DesiredConditionForm: React.FC<{
 
     // Render validation errors
     (() => {
-        // If there are no validation errors, return
+        // If there are no validation errors, return.
         if (Object.keys(validationErrors).length === 0) return;
 
         const keys = Object.keys(form.getValues());
@@ -110,17 +110,17 @@ export const DesiredConditionForm: React.FC<{
                         <form onSubmit={form.onSubmit(() => onSubmit())}>
                             <Stack>
                                 <NumberInput
+                                    onFocus={(e) => e.target.select()}
                                     required
                                     label="Price"
-                                    placeholder="48.10"
                                     {...form.getInputProps("unit_price")}
                                     key={form.key("unit_price")}
                                 />
 
                                 <NumberInput
+                                    onFocus={(e) => e.target.select()}
                                     required
                                     label="Quantity"
-                                    placeholder="2525"
                                     {...form.getInputProps("quantity")}
                                     key={form.key("quantity")}
                                 />

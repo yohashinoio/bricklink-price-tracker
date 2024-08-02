@@ -223,6 +223,7 @@ export const ItemForm: React.FC = () => {
                                 />
 
                                 <TextInput
+                                    onFocus={(e) => e.target.select()}
                                     required
                                     label="Item No"
                                     placeholder="min010"

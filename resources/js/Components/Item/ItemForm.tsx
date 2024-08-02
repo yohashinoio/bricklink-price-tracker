@@ -216,9 +216,7 @@ export const ItemForm: React.FC = () => {
                                         "Unsorted_lot",
                                         "Original_box",
                                     ]}
-                                    searchable
                                     allowDeselect
-                                    nothingFoundMessage="Nothing found..."
                                     comboboxProps={{ zIndex: 1000 }} // Ensure the dropdown is on top of the drawer
                                 />
 

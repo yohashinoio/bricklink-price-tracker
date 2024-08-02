@@ -16,17 +16,21 @@ export const PriceGuideText: React.FC<Props> = ({ price_guide }) => {
             <Group gap={6}>
                 <NewBadge />
                 <Text>
-                    {price_guide.min_price_of_new +
-                        " " +
-                        price_guide.currency_code || out_of_stock_msg}{" "}
+                    {price_guide.min_price_of_new
+                        ? price_guide.min_price_of_new +
+                          " " +
+                          price_guide.currency_code
+                        : out_of_stock_msg}{" "}
                 </Text>
             </Group>
             <Group gap={6}>
                 <UsedBadge />
                 <Text>
-                    {price_guide.min_price_of_used +
-                        " " +
-                        price_guide.currency_code || out_of_stock_msg}{" "}
+                    {price_guide.min_price_of_used
+                        ? price_guide.min_price_of_used +
+                          " " +
+                          price_guide.currency_code
+                        : out_of_stock_msg}{" "}
                 </Text>
             </Group>
         </Group>

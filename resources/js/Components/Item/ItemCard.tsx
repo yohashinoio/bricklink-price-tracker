@@ -221,6 +221,24 @@ export const ItemCard: React.FC<Props> = React.memo(({ item, colors }) => {
                             maw={100}
                             mah={80}
                             mr={20}
+                            onClick={() => {
+                                // Move to bricklink item page.
+                                const base =
+                                    "https://www.bricklink.com/v2/catalog/catalogitem.page";
+                                const query_name_for_no =
+                                    item.item_info.type[0];
+
+                                if (item.color_id) {
+                                    window.open(
+                                        `${base}?${query_name_for_no}=${item.item_info.no}&C=${item.color_id}`
+                                    );
+                                } else {
+                                    window.open(
+                                        `${base}?${query_name_for_no}=${item.item_info.no}`
+                                    );
+                                }
+                            }}
+                            style={{ cursor: "pointer" }}
                         >
                             <Image
                                 fit="contain"

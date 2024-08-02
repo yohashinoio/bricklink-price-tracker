@@ -110,7 +110,7 @@ export const DesiredConditionForm: React.FC<{
                         <form onSubmit={form.onSubmit(() => onSubmit())}>
                             <Stack>
                                 <NumberInput
-                                    onFocus={(e) => e.target.select()}
+                                    onFocusCapture={(e) => e.target.select()}
                                     required
                                     label="Price"
                                     {...form.getInputProps("unit_price")}
@@ -118,7 +118,7 @@ export const DesiredConditionForm: React.FC<{
                                 />
 
                                 <NumberInput
-                                    onFocus={(e) => e.target.select()}
+                                    onFocusCapture={(e) => e.target.select()}
                                     required
                                     label="Quantity"
                                     {...form.getInputProps("quantity")}

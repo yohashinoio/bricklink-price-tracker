@@ -310,7 +310,9 @@ export const ItemCard: React.FC<Props> = React.memo(({ item, colors }) => {
 
                     <Flex direction="column" justify={"space-between"}>
                         <Flex gap={8} justify={"flex-end"} align={"center"}>
-                            <Badge variant="default">{item.updated_at}</Badge>
+                            <Badge variant="default">
+                                {item.price_guide.updated_at}
+                            </Badge>
 
                             <DesiredConditionForm
                                 item_id={item.id}

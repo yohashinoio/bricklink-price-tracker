@@ -20,11 +20,6 @@ class Item extends Model
         'colored_image_url',
     ];
 
-    public function getUpdatedAtAttribute(string $value)
-    {
-        return Carbon::parse($value)->diffForHumans();
-    }
-
     public function itemInfo(): BelongsTo
     {
         return $this->belongsTo(ItemInfo::class);

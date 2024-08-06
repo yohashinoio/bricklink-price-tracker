@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\BricklinkApiService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,6 +57,11 @@ class PriceGuide extends Model
         'total_quantity_of_new',
         'total_quantity_of_used',
     ];
+
+    public function getUpdatedAtAttribute(string $value)
+    {
+        return Carbon::parse($value)->diffForHumans();
+    }
 
     public function item(): BelongsTo
     {

@@ -25,6 +25,7 @@ import { DesiredCondition } from "@/types/desired_condition";
 import axios from "axios";
 import { Head, router } from "@inertiajs/react";
 import { Setting } from "@/Components/Item/Setting";
+import { BatchUpdate } from "@/Components/Item/BatchUpdate";
 
 type Props = {
     items: Item[];
@@ -119,6 +120,7 @@ export default function ({
                     </Affix>
 
                     <Flex justify={"end"} gap={8} mb={16}>
+                        <BatchUpdate items={items} />
                         <Setting current_items_per_page={items_per_page} />
                     </Flex>
 

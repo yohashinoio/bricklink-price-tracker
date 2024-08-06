@@ -34,6 +34,8 @@ export type PriceGuide = {
     total_quantity_of_new: number;
     total_quantity_of_used: number;
 
+    updated_at: string;
+
     price_details: PriceDetail[];
 };
 
@@ -54,5 +56,4 @@ export type Item = {
     desired_condition: DesiredCondition | undefined;
     watched_item_id: number;
     position: number;
-    updated_at: string;
 };

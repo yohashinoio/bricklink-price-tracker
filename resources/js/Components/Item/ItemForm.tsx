@@ -123,7 +123,6 @@ export const ItemForm: React.FC = () => {
                         knowns.data[0].color_id === 0
                     ) {
                         // The item doesn't have color.
-                        setNextStepLoading(false);
                         setActive(1);
                         return;
                     }
@@ -156,8 +155,7 @@ export const ItemForm: React.FC = () => {
                     form.setFieldError("no", "The item could not be found.");
 
                     console.error(err);
-                })
-                .finally(() => setNextStepLoading(false));
+                });
         }
 
         if (active === 1) onComplete();
@@ -187,6 +185,11 @@ export const ItemForm: React.FC = () => {
         });
     })();
 
+    // Reset next step loading when the active step changes.
+    React.useEffect(() => {
+        setNextStepLoading(false);
+    }, [active]);
+
     return (
         <>
             <Box pos="relative">
@@ -196,7 +199,11 @@ export const ItemForm: React.FC = () => {
                     overlayProps={{ radius: "sm", blur: 2 }}
                 />
 
-                <Stepper active={active} onStepClick={setActive}>
+                <Stepper
+                    active={active}
+                    onStepClick={setActive}
+                    allowNextStepsSelect={false}
+                >
                     <Stepper.Step label="First step" description="Enter item">
                         <form>
                             <Stack>

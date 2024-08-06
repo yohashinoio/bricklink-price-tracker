@@ -54,4 +54,5 @@ export type Item = {
     desired_condition: DesiredCondition | undefined;
     watched_item_id: number;
     position: number;
+    updated_at: string;
 };

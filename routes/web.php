@@ -5,20 +5,22 @@ use App\Http\Controllers\DesiredConditionController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WatchedItemController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 Route::get('/', function () {
     if (Auth::check())
-        return redirect(route("items.index"), 301);
+        return redirect(route("items.index", 1), 301);
     else
         return Inertia::render('Welcome', []);
 });
 
 Route::get('/dashboard', function () {
-    return redirect(route("items.index"), 301);
+    return redirect(route("items.index", 1), 301);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -29,7 +31,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource("items", ItemController::class)->middleware(["auth", "verified"])->only("index", "store", "destroy");
+Route::get("items/{page_number}", [ItemController::class, "index"])->middleware(["auth", "verified"])->name("items.index");
+
+Route::resource("items", ItemController::class)->middleware(["auth", "verified"])->only("store", "destroy");
 Route::resource("watched_items", WatchedItemController::class)->middleware(["auth", "verified"])->only("store");
 
 Route::post("prices/{item_id}", [PriceController::class, "update"])->middleware(["auth", "verified"])->name("prices.update");
@@ -40,3 +44,5 @@ Route::get("colors/detail/{color_id}", [ColorController::class, "detail"])->midd
 Route::post("desired_conditions/{item_id}", [DesiredConditionController::class, "updateOrStore"])->middleware(["auth", "verified"])->name("desired_conditions.updateOrStore");
 
 Route::post("watched_items/update_position/{watched_item_id}", [WatchedItemController::class, "updatePosition"])->middleware(["auth", "verified"])->name("watched_items.update_position");
+
+Route::post("update-settings", [SettingController::class, "update"])->middleware(["auth", "verified"])->name("settings.update");

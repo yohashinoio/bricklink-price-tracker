@@ -13,8 +13,19 @@ import {
     Text,
     Center,
     Badge,
+    rem,
 } from "@mantine/core";
-import { IconGripVertical, IconRefresh, IconTrash } from "@tabler/icons-react";
+import {
+    IconAt,
+    IconCircleArrowDown,
+    IconCloudDown,
+    IconCloudDownload,
+    IconDownload,
+    IconGripVertical,
+    IconRefresh,
+    IconTrash,
+    IconWorldDownload,
+} from "@tabler/icons-react";
 import { DesiredConditionForm } from "./DesiredConditionForm";
 import { MatchStateBadge } from "./Price/MatchStateBadge";
 import { PriceGraph } from "./Price/PriceGraph";
@@ -298,7 +309,9 @@ export const ItemCard: React.FC<Props> = React.memo(({ item, colors }) => {
                     </Flex>
 
                     <Flex direction="column" justify={"space-between"}>
-                        <Flex gap={8} justify={"flex-end"}>
+                        <Flex gap={8} justify={"flex-end"} align={"center"}>
+                            <Badge variant="default">{item.updated_at}</Badge>
+
                             <DesiredConditionForm
                                 item_id={item.id}
                                 current_desire={item.desired_condition}

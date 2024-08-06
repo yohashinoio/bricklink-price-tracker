@@ -2,7 +2,16 @@ import { ItemForm } from "@/Components/Item/ItemForm";
 import { Layout } from "@/Layouts/Layout";
 import { PageProps } from "@/types";
 import { Item } from "@/types/item";
-import { ActionIcon, Affix, Box, Drawer, Stack } from "@mantine/core";
+import {
+    ActionIcon,
+    Affix,
+    Box,
+    Center,
+    Drawer,
+    Flex,
+    Pagination,
+    Stack,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 
@@ -14,7 +23,8 @@ import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { DesiredCondition } from "@/types/desired_condition";
 import axios from "axios";
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
+import { Setting } from "@/Components/Item/Setting";
 
 type Props = {
     items: Item[];
@@ -25,12 +35,19 @@ type Props = {
         desired_condition: DesiredCondition;
     }[];
     colors: Color[];
+
+    total_pages: number;
+    current_page: number;
+    items_per_page: number;
 } & PageProps;
 
 export default function ({
     items: items_from_props,
     watched_items,
     colors,
+    total_pages,
+    current_page,
+    items_per_page,
     auth,
 }: Props) {
     const [items, setItems] = React.useState(
@@ -47,6 +64,8 @@ export default function ({
             // Sort by position
             .sort((a, b) => a.position - b.position)
     );
+
+    console.log(current_page);
 
     const [opened, { open, close }] = useDisclosure();
 
@@ -99,6 +118,10 @@ export default function ({
                         </ActionIcon>
                     </Affix>
 
+                    <Flex justify={"end"} gap={8} mb={16}>
+                        <Setting current_items_per_page={items_per_page} />
+                    </Flex>
+
                     <DndContext
                         collisionDetection={closestCenter}
                         modifiers={[restrictToVerticalAxis]}
@@ -116,6 +139,18 @@ export default function ({
                             </Stack>
                         </SortableContext>
                     </DndContext>
+
+                    {items.length !== 0 && (
+                        <Center mt={20}>
+                            <Pagination
+                                total={total_pages}
+                                value={current_page}
+                                onChange={(value) =>
+                                    router.get(route("items.index", value))
+                                }
+                            />
+                        </Center>
+                    )}
                 </Box>
             </Layout>
         </>

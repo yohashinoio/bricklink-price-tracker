@@ -16,6 +16,11 @@ class WatchedItem extends Model
         'desired_condition_id',
     ];
 
+    public function item(): BelongsTo
+    {
+        return $this->belongsTo(Item::class);
+    }
+
     public function desiredCondition(): HasOne
     {
         return $this->hasOne(DesiredCondition::class);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\BricklinkApiService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,11 @@ class Item extends Model
         'color_id',
         'colored_image_url',
     ];
+
+    public function getUpdatedAtAttribute(string $value)
+    {
+        return Carbon::parse($value)->diffForHumans();
+    }
 
     public function itemInfo(): BelongsTo
     {

@@ -66,8 +66,6 @@ export default function ({
             .sort((a, b) => a.position - b.position)
     );
 
-    console.log(current_page);
-
     const [opened, { open, close }] = useDisclosure();
 
     const onDragEnd = (event: DragEndEvent) => {

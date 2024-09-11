@@ -28,11 +28,7 @@ export const BatchUpdate: React.FC<{ items: Item[] }> = ({ items }) => {
                 let promises: Promise<any>[] = [];
 
                 items.forEach((item) => {
-                    (async () => {
-                        promises.push(
-                            axios.post(route("prices.update", item.id))
-                        );
-                    })();
+                    promises.push(axios.post(route("prices.update", item.id)));
                 });
 
                 Promise.all(promises).then(() => {

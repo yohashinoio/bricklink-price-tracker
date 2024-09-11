@@ -32,10 +32,6 @@ export const BatchUpdate: React.FC<{ items: Item[] }> = ({ items }) => {
                         promises.push(
                             axios.post(route("prices.update", item.id))
                         );
-                        // For reducing the server load on Bricklink.
-                        await new Promise((resolve) =>
-                            setTimeout(resolve, 1000)
-                        );
                     })();
                 });
 
